@@ -1,6 +1,8 @@
 require("levels")
 -- defines levelTable, objTable, hero
 
+-- TEST COMMENT TO SEE CHANGES ON GITHUB
+
 -- define globals
 level = 1
 fogOfWar = {}
