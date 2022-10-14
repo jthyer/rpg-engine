@@ -2,6 +2,7 @@ require("levels")
 -- defines levelTable, objTable, hero
 
 -- TEST COMMENT TO SEE CHANGES ON GITHUB
+-- SECOND TEST COMMENT
 
 -- define globals
 level = 1
