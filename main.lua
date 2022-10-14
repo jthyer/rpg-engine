@@ -168,16 +168,23 @@ function love.draw()
   
   -- draw text box
   if textBox.status then
+    local y_offset 
+    if hero.y > 10 then 
+      y_offset = 0
+    else 
+      y_offset = 215 - 35 - textBox.HEIGHT
+    end
+      
     love.graphics.setColor(0,0,0)
-    love.graphics.rectangle("fill",textBox.X-textBox.BORDER-1,textBox.Y-textBox.BORDER-1,
+    love.graphics.rectangle("fill",textBox.X-textBox.BORDER-1,textBox.Y-textBox.BORDER-1+ y_offset ,
       textBox.WIDTH+(textBox.BORDER*2)+2,textBox.HEIGHT+(textBox.BORDER*2)+2)
     love.graphics.setColor(1,1,1)
-    love.graphics.rectangle("fill",textBox.X-textBox.BORDER,textBox.Y-textBox.BORDER,
+    love.graphics.rectangle("fill",textBox.X-textBox.BORDER,textBox.Y-textBox.BORDER+ y_offset ,
       textBox.WIDTH+(textBox.BORDER*2),textBox.HEIGHT+(textBox.BORDER*2))
     love.graphics.setColor(0,0,0)
-    love.graphics.rectangle("fill",textBox.X,textBox.Y,textBox.WIDTH,textBox.HEIGHT)
+    love.graphics.rectangle("fill",textBox.X,textBox.Y+ y_offset ,textBox.WIDTH,textBox.HEIGHT)
     love.graphics.setColor(1,1,1)
-    love.graphics.printf(textBox.text,textBox.X+10,textBox.Y+10,textBox.WIDTH-20,"left")
+    love.graphics.printf(textBox.text,textBox.X+10,textBox.Y+10+ y_offset ,textBox.WIDTH-20,"left")
   end
   
   love.graphics.pop()

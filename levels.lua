@@ -44,7 +44,8 @@ objTable = {
     { "doorV", 4, 11 } ,
     { "doorV", 6, 12 } ,
     { "doorV", 14, 6 } ,
-    { "doorH", 5, 13 } 
+    { "doorH", 5, 13 } ,
+    { "doorH", 18, 17 } 
   } ,
   { -- level 2
     { "lockedDoor", 5, 1 } , 
