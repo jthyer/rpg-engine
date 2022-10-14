@@ -13,6 +13,18 @@ message = ""
 ROOMWIDTH = 20
 ROOMHEIGHT = 20
 
+WINDOWWIDTH = 600
+WINDOWHEIGHT = 500
+
+textBox = {}
+textBox.status = false
+textBox.text = eventTable[1][1][1]
+textBox.WIDTH = 250
+textBox.HEIGHT = 75
+textBox.X = (300 - textBox.WIDTH) / 2
+textBox.Y = textBox.X + 10
+textBox.BORDER = 2
+
 KEYTABLE = {
   ["left"]  = {-1, 0},
   ["up"]    = { 0,-1},
@@ -25,7 +37,7 @@ function love.load()
   -- window settings
   love.graphics.setDefaultFilter("nearest", "nearest", 1)
   love.window.setTitle("tower rpg")
-  love.window.setMode(600, 500)
+  love.window.setMode(WINDOWWIDTH, WINDOWHEIGHT)
   font = love.graphics.newFont("cmd.ttf", 16)
   love.graphics.setFont(font)
   
@@ -42,6 +54,11 @@ function love.load()
 end
 
 function love.update()
+  -- don't update game state if waiting to close text box
+  if textBox.status then
+    return
+  end
+  
   -- update fog of war
   fogOfWar[hero.y-1][hero.x-1] = 0
   fogOfWar[hero.y-1][hero.x]   = 0
@@ -65,6 +82,15 @@ function love.update()
       end
     end
   end
+  
+  -- check for events
+  for i, v in ipairs(eventTable[level]) do
+    if hero.x == v[2] and hero.y == v[3] then
+      textBox.text = eventTable[level][i][1]
+      textBox.status = true
+     -- table.remove(eventTable[level],i)
+    end
+  end
 end
 
 function love.draw()
@@ -84,8 +110,8 @@ function love.draw()
   love.graphics.setColor(1,1,1)
 
   -- draw objects
+  love.graphics.setColor(1,0,1)
   for i, v in ipairs(objTable[level]) do
-    love.graphics.setColor(1,0,1)
     if v[1] == "doorV" then
       local x = (v[2]-1) * 10
       local y = (v[3]-1) * 10
@@ -101,6 +127,13 @@ function love.draw()
   end  
   love.graphics.setColor(1,1,1)
 
+  -- draw events
+  love.graphics.setColor(1,0,1)
+  for i, v in ipairs(eventTable[level]) do
+    love.graphics.rectangle("fill", (v[2] - 1) * 10+3, (v[3] - 1) * 10 + 3, 4, 4)
+  end
+  love.graphics.setColor(1,1,1)
+  
   -- draw walls
   for i, v in ipairs(levelTable[level]) do
     for j, v2 in ipairs(levelTable[level][i]) do
@@ -130,6 +163,21 @@ function love.draw()
   love.graphics.printf(message,-50,ROOMHEIGHT*10+8,300,"center")
   
   love.graphics.pop()
+  
+  -- draw text box
+  if textBox.status then
+    love.graphics.setColor(0,0,0)
+    love.graphics.rectangle("fill",textBox.X-textBox.BORDER-1,textBox.Y-textBox.BORDER-1,
+      textBox.WIDTH+(textBox.BORDER*2)+2,textBox.HEIGHT+(textBox.BORDER*2)+2)
+    love.graphics.setColor(1,1,1)
+    love.graphics.rectangle("fill",textBox.X-textBox.BORDER,textBox.Y-textBox.BORDER,
+      textBox.WIDTH+(textBox.BORDER*2),textBox.HEIGHT+(textBox.BORDER*2))
+    love.graphics.setColor(0,0,0)
+    love.graphics.rectangle("fill",textBox.X,textBox.Y,textBox.WIDTH,textBox.HEIGHT)
+    love.graphics.setColor(1,1,1)
+    love.graphics.printf(textBox.text,textBox.X+10,textBox.Y+10,textBox.WIDTH-20,"left")
+  end
+  
   love.graphics.pop()
 end
 
@@ -152,16 +200,20 @@ end
 function getMessage (l, x, y)
   -- reads levelTable and msgTable
   local code = levelTable[l][y][x]
-  print(msgTable[l][code])
   
   return msgTable[l][code]
 end
 
 -- event functions
 function love.keypressed(key, scancode, isrepeat)
+  if textBox.status then
+    textBox.status = false
+   -- return
+  end
+  
   if KEYTABLE[key] == nil then
     return
-  end
+  end  
   -- move hero if no walls or doors in the way
   local move_x = hero.x + KEYTABLE[key][1]
   local move_y = hero.y + KEYTABLE[key][2]
