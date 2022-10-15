@@ -3,25 +3,31 @@
 require("levels")
 
 -- next steps:
---  1) implement choices on the text box events
+--  1) implement choices on the text box events 
+--   done! 
+--   Subtasks a) make responsive to hero position
+--            b) show another text box after choice, push hero off event  
 --  2) implement a simple inventory
 --  3) pick up a key, add it to the inventory, open a locked door
--- and set the window size in the conf instead of load
+
+-- efficiency changes to do:
+--  * Code text box coordinates in load event, not every frame in draw
 
 -- define globals and constants
 level = 1
 fogOfWar = {} 
-message = "" 
+message = ""
 
 ROOMWIDTH = 20
 ROOMHEIGHT = 20
 
-WINDOWWIDTH = 600
-WINDOWHEIGHT = 500
-
 textBox = {}
   textBox.status = false
-  textBox.text = eventTable[1][1][1]
+  textBox.choiceStatus = 0
+  textBox.choice1 = ""
+  textBox.choice2 = ""
+  textBox.eventID = ""
+  textBox.text = eventTable[1][1][4]
   textBox.WIDTH = 250
   textBox.HEIGHT = 75
   textBox.X = (300 - textBox.WIDTH) / 2
@@ -32,7 +38,8 @@ KEYTABLE = {
   ["left"]  = {-1, 0},
   ["up"]    = { 0,-1},
   ["right"] = { 1, 0},
-  ["down"]  = { 0, 1}
+  ["down"]  = { 0, 1},
+  ["Z"]     = { 0, 0}
 }
 
 
@@ -40,8 +47,7 @@ function love.load()
   -- window settings
   love.graphics.setDefaultFilter("nearest", "nearest", 1)
   love.window.setTitle("Custom RPG Engine")
-  love.window.setMode(WINDOWWIDTH, WINDOWHEIGHT)
-  
+
   -- set font
   font = love.graphics.newFont("cmd.ttf", 16)
   love.graphics.setFont(font)
@@ -99,8 +105,17 @@ function updateWorldState()
   do 
     local checkEvents = function (i,v)
       if hero.x == v[2] and hero.y == v[3] then
-        textBox.text = eventTable[level][i][1]
-        textBox.status = true
+        textBox.eventID = i
+        if v[1] == "textBox" then
+          textBox.text = eventTable[level][i][4]
+          textBox.status = true
+        elseif v[1] == "choiceBox" then
+          textBox.text = eventTable[level][i][4]
+          textBox.choice1 = eventTable[level][i][5]
+          textBox.choice2 = eventTable[level][i][6]
+          textBox.choiceStatus = 1
+          textBox.status = true
+        end
       end
     end
     iterateTable(eventTable[level],checkEvents)
@@ -110,6 +125,17 @@ end
 
 function setColor(c)
   love.graphics.setColor(COLORTABLE[c][1],COLORTABLE[c][2],COLORTABLE[c][3])
+end
+
+function drawTextBox(text, x, y, w, h, b)  
+  setColor("black")
+  love.graphics.rectangle("fill",x-b-1,y-b-1,w+(b*2)+2,h+(b*2)+2)
+  setColor("white")
+  love.graphics.rectangle("fill",x-b,y-b,w+(b*2),h+(b*2))
+  setColor("black")
+  love.graphics.rectangle("fill",x,y,w,h)
+  setColor("white")
+  love.graphics.printf(text,x+10,y+10,w-20,"left")
 end
 
 function love.draw()
@@ -148,8 +174,10 @@ function love.draw()
 
   -- draw events
   do
-    local drawEvent = function (i,v) 
-      love.graphics.rectangle("fill", (v[2] - 1) * 10+3, (v[3] - 1) * 10 + 3, 4, 4)
+    local drawEvent = function (i,v)
+      if v[1] ~= "NULL" then
+        love.graphics.rectangle("fill", (v[2] - 1) * 10+3, (v[3] - 1) * 10 + 3, 4, 4)
+      end
     end
     
     setColor("pink")    
@@ -179,7 +207,7 @@ function love.draw()
   -- end dungeon window drawing
   love.graphics.pop()
   
-  -- draw text box
+  --draw text box
   if textBox.status then
     local y_offset 
     if hero.y > 10 then 
@@ -187,18 +215,25 @@ function love.draw()
     else 
       y_offset = 180 - textBox.HEIGHT
     end
-      
-    local x, y, w, h, b = 
-      textBox.X,textBox.Y + y_offset,textBox.WIDTH,textBox.HEIGHT,textBox.BORDER
-    
-    setColor("black")
-    love.graphics.rectangle("fill",x-b-1,y-b-1,w+(b*2)+2,h+(b*2)+2)
-    setColor("white")
-    love.graphics.rectangle("fill",x-b,y-b,w+(b*2),h+(b*2))
-    setColor("black")
-    love.graphics.rectangle("fill",x,y,w,h)
-        setColor("white")
-    love.graphics.printf(textBox.text,x+10,y+10,w-20,"left")
+
+    drawTextBox(textBox.text, textBox.X, textBox.Y + y_offset, 
+      textBox.WIDTH, textBox.HEIGHT,textBox.BORDER)
+
+    if textBox.choiceStatus > 0 then
+      local choiceOffset = 0
+      local w,h = 20, 20
+      local c1, c2 = textBox.choice1, textBox.choice2 
+      if textBox.choiceStatus == 1 then
+        c1 = "<" .. textBox.choice1 .. ">"
+        c2 = "  " .. textBox.choice2 .. " "
+      else
+        c1 = "  " .. textBox.choice1 .. " "
+        c2 = "<" .. textBox.choice2 .. ">"
+      end
+      setColor("black")
+      drawTextBox(c1 .. "\n" .. c2, 
+          textBox.X, textBox.Y + y_offset - 60, 60, 50, 2)
+    end
   end
   
   love.graphics.pop()
@@ -207,24 +242,38 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
   if textBox.status then
-    textBox.status = false
+    if textBox.choiceStatus > 0 then
+      if key == "up" then 
+        textBox.choiceStatus = 1
+      elseif key == "down" then
+        textBox.choiceStatus = 2
+      elseif key == "z" then
+        textBox.choiceStatus = 0
+        textBox.status = false
+        print("Setting eventID " .. textBox.eventID .. " to NULL!")
+        eventTable[level][textBox.eventID][1] = "NULL"
+      end
+      return
+    else  
+      textBox.status = false
+    end
   end  
   
   if KEYTABLE[key] == nil then
     return
   end  
-
+  
   -- move hero if no walls in the way
   local move_x = hero.x + KEYTABLE[key][1]
   local move_y = hero.y + KEYTABLE[key][2]
-
+  
   if move_x > 0 and move_x <= ROOMWIDTH and
-     move_y > 0 and move_y <= ROOMHEIGHT then
+    move_y > 0 and move_y <= ROOMHEIGHT then
     if levelTable[level][move_y][move_x] ~= 1 then
       hero.x = move_x
       hero.y = move_y
     end
   end
-
+  
   updateWorldState()
 end

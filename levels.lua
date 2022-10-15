@@ -8,10 +8,10 @@ COLORTABLE = {
 
 levelTable = { 
   { -- level 1
-    { 1,1,1,1,2,1,1,1,1,1, 1,1,1,1,0,1,1,1,1,1 } ,
-    { 1,1,1,1,2,1,1,1,1,1, 1,1,1,1,0,0,0,0,0,1 } ,
-    { 1,1,1,1,2,1,4,4,1,4, 1,4,4,1,0,0,0,0,0,1 } ,
-    { 1,1,1,1,2,1,4,4,4,4, 4,4,4,1,5,1,0,0,0,1 } ,
+    { 1,1,1,1,2,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1 } ,
+    { 1,1,1,1,2,1,1,1,1,1, 1,1,1,1,6,6,6,6,1,1 } ,
+    { 1,1,1,1,2,1,4,4,1,4, 1,4,4,1,6,6,6,6,1,1 } ,
+    { 1,1,1,1,2,1,4,4,4,4, 4,4,4,1,5,1,1,1,1,1 } ,
     { 1,3,3,1,2,1,4,4,4,4, 4,4,4,1,5,1,0,0,0,1 } ,
     { 1,3,3,3,2,4,4,4,4,4, 4,4,4,4,5,1,0,0,0,1 } ,
     { 1,3,3,1,2,1,4,4,4,4, 4,4,4,1,5,1,0,0,0,1 } ,
@@ -43,7 +43,8 @@ objTable = {
     { "doorV", 6, 12 } ,
     { "doorV", 14, 6 } ,
     { "doorH", 5, 13 } ,
-    { "doorH", 18, 17 } 
+    { "doorH", 18, 17 } ,
+    { "doorH", 15, 4 }
   } ,
   { -- level 2
   } 
@@ -55,17 +56,20 @@ msgTable = {
      [2] = "---ENTRANCE HALL---",
      [3] = "---PRIEST'S QUARTERS---",
      [4] = "---SANCTUARY---",
-     [5] = "---BLOODIED BACK HALLWAY---"
+     [5] = "---BLOODIED BACK HALLWAY---",
+     [6] = "---RANSACKED DOCTOR'S ROOM---"
   }
 }
 
 -- should make it so events can be destructible, invisible
 eventTable = {
   { -- level 1
-     { "THE PRIEST'S CORPSE LEANS AGAINST THE WALL NEXT TO HIS BED. AN ARROW STICKS OUT OF HIS CHEST.",
-       2,13 } ,
-     { "THE SANCTUARY'S STATUE OF THE GODDESS LAYS TOPPLED AND BROKEN ON THE FLOOR.",
-       10,3 }
+     { "textBox", 2, 13,
+       "THE PRIEST'S CORPSE LEANS AGAINST THE WALL NEXT TO HIS BED. AN ARROW STICKS OUT OF HIS CHEST."} ,
+     { "textBox", 10, 3,
+       "THE SANCTUARY'S STATUE OF THE GODDESS LAYS TOPPLED AND BROKEN ON THE FLOOR." },
+     { "choiceBox", 18, 2,
+       "YOU FIND A SMALL HEALING POTION IN THE LOOTED TREATMENT ROOM. TAKE IT?", "YES", "NO" }
   }
 }  
 
