@@ -1,3 +1,11 @@
+COLORTABLE = {
+  ["white"]  = { 1,1,1 },
+  ["black"]  = { 0,0,0 },
+  ["pink"]   = { 1,0,1 },
+  ["yellow"] = { 1,1,0 },
+  ["grey"] = {.8,.8,.8 }
+}
+
 levelTable = { 
   { -- level 1
     { 1,1,1,1,2,1,1,1,1,1, 1,1,1,1,0,1,1,1,1,1 } ,
@@ -23,16 +31,6 @@ levelTable = {
     { 1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1 }
   } ,
   { -- level 2
-    { 1,1,1,1,0,1,1,1,1,1 } ,
-    { 1,0,0,1,0,1,0,0,0,1 } ,
-    { 1,0,0,1,0,1,0,0,0,1 } ,
-    { 1,0,0,0,0,0,0,0,0,1 } ,
-    { 1,0,0,0,1,0,0,0,0,1 } ,
-    { 1,0,0,1,1,1,1,1,0,1 } ,
-    { 1,0,0,0,0,0,1,1,0,1 } ,
-    { 1,0,0,0,0,0,0,0,0,1 } ,
-    { 1,0,0,0,0,0,0,0,0,1 } ,
-    { 1,1,1,1,1,1,1,1,1,1 }
   }
 }
 
@@ -48,8 +46,6 @@ objTable = {
     { "doorH", 18, 17 } 
   } ,
   { -- level 2
-    { "lockedDoor", 5, 1 } , 
-    { "key",        3, 9 }
   } 
 }
 
@@ -63,6 +59,7 @@ msgTable = {
   }
 }
 
+-- should make it so events can be destructible, invisible
 eventTable = {
   { -- level 1
      { "THE PRIEST'S CORPSE LEANS AGAINST THE WALL NEXT TO HIS BED. AN ARROW STICKS OUT OF HIS CHEST.",
