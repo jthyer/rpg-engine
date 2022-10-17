@@ -1,3 +1,5 @@
+-- put updateMap into moveHero
+
 local ROOMWIDTH = 20
 local ROOMHEIGHT = 20
 
