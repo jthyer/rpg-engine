@@ -1,6 +1,6 @@
 -- defines levelTable, objTable, eventTable, messages hero
 -- everything that makes up the actual map is in "levels"
-require("levelData")
+require("mapData")
 require("event")
 require("map")
 
