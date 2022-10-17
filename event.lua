@@ -2,7 +2,6 @@ local textBox = {}
   textBox.choiceStatus = 0
   textBox.choice1 = ""
   textBox.choice2 = ""
-  textBox.eventID = ""
   textBox.text = eventTable[1][1][4]
   textBox.WIDTH = 250
   textBox.HEIGHT = 75
@@ -10,21 +9,26 @@ local textBox = {}
   textBox.Y = textBox.X + 10
   textBox.BORDER = 2
   
+local eventID = 0
+local subeventID = 0
+
+  
 function updateEvents()
-  --update events
+  -- check if hero overlaps event
   do 
     local checkEvents = function (i,v)
       if hero.x == v[2] and hero.y == v[3] then
-        textBox.eventID = i
-        if v[1] == "textBox" then
-          textBox.text = eventTable[level][i][4]
-          scene = "textBox"
-        elseif v[1] == "choiceBox" then
-          textBox.text = eventTable[level][i][4]
-          textBox.choice1 = eventTable[level][i][5]
-          textBox.choice2 = eventTable[level][i][6]
-          textBox.choiceStatus = 1
-          scene = "textBox"
+        eventID = i
+        subeventID = 1
+        scene = "event"
+        textBox.text = eventTable[level][eventID][4][subeventID][2]
+        do
+        --elseif v[1] == "choiceBox" then
+        --  textBox.text = eventTable[level][i][4]
+        --  textBox.choice1 = eventTable[level][i][5]
+        --  textBox.choice2 = eventTable[level][i][6]
+        --  textBox.choiceStatus = 1
+        --  scene = "event"
         end
       end
     end
@@ -69,38 +73,49 @@ function drawTextBoxEvent()
 
   drawTextBox(textBox.text, textBox.X, textBox.Y + y_offset, 
     textBox.WIDTH, textBox.HEIGHT,textBox.BORDER)
-
-  if textBox.choiceStatus > 0 then
-    local choiceOffset = 0
-    local w,h = 20, 20
-    local c1, c2 = textBox.choice1, textBox.choice2 
-    if textBox.choiceStatus == 1 then
-      c1 = "<" .. textBox.choice1 .. ">"
-      c2 = "  " .. textBox.choice2 .. " "
-    else
-      c1 = "  " .. textBox.choice1 .. " "
-      c2 = "<" .. textBox.choice2 .. ">"
-    end
-    setColor("black")
-    drawTextBox(c1 .. "\n" .. c2, 
-        textBox.X, textBox.Y + y_offset - 60, 60, 50, 2)
+  
+  do
+--  if textBox.choiceStatus > 0 then
+--    local choiceOffset = 0
+--    local w,h = 20, 20
+--    local c1, c2 = textBox.choice1, textBox.choice2 
+--    if textBox.choiceStatus == 1 then
+--      c1 = "<" .. textBox.choice1 .. ">"
+--      c2 = "  " .. textBox.choice2 .. " "
+--    else
+--      c1 = "  " .. textBox.choice1 .. " "
+--      c2 = "<" .. textBox.choice2 .. ">"
+--    end
+--    setColor("black")
+--    drawTextBox(c1 .. "\n" .. c2, 
+--        textBox.X, textBox.Y + y_offset - 60, 60, 50, 2)
+--  end
   end
 end
 
 function eventKeyPressed(key)
-  if textBox.choiceStatus > 0 then
-    if key == "up" then 
-      textBox.choiceStatus = 1
-    elseif key == "down" then
-      print("test!")
-      textBox.choiceStatus = 2
-    elseif key == "z" then
-      textBox.choiceStatus = 0
+  do
+ -- if textBox.choiceStatus > 0 then
+ --   if key == "up" then 
+ --     textBox.choiceStatus = 1
+ --   elseif key == "down" then
+ --     textBox.choiceStatus = 2
+ --   elseif key == "z" then
+ --     textBox.choiceStatus = 0
+ --     scene = "map"
+ --     eventTable[level][textBox.eventID][1] = "NULL"
+ --   end
+ --   return
+ -- --elseif key == "z" then 
+ end
+  if key == "z" then
+    local eventLog = eventTable[level][eventID][4]
+   
+    if subeventID < #eventLog then
+      subeventID = subeventID + 1
+      textBox.text = eventLog[subeventID][2]
+    else
       scene = "map"
-      eventTable[level][textBox.eventID][1] = "NULL"
     end
-    return
-  elseif key == "z" then
-    scene = "map"
   end
 end

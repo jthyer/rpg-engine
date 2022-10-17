@@ -56,14 +56,23 @@ msgTable = {
 -- should make it so events can be destructible, invisible
 eventTable = {
   { -- level 1
-     { "textBox", 2, 13,
-       "THE PRIEST'S CORPSE LEANS AGAINST THE WALL NEXT TO HIS BED. AN ARROW STICKS OUT OF HIS CHEST."} ,
-     { "textBox", 10, 3,
-       "THE SANCTUARY'S STATUE OF THE GODDESS LAYS TOPPLED AND BROKEN ON THE FLOOR." },
-     { "choiceBox", 5,4,--18, 2,
-       "YOU FIND A SMALL HEALING POTION IN THE LOOTED TREATMENT ROOM. TAKE IT?", "YES", "NO" }
+    { "deadPriest", -- event name
+      5, 4,        -- event x and y
+      {              -- event log
+        { "textBox", "THE PRIEST'S CORPSE LEANS AGAINST THE WALL NEXT TO HIS BED." } ,
+        { "textBox", "AN ARROW STICKS OUT OF HIS CHEST." } ,
+        { "textBox", "IT'S VERY SAD." } --,
+       -- { "textBox", "THE PRIEST WAS YOUR DAD, PLOT TWIST." } ,
+       -- { "textBox", "WOW I CAN REALLY PUT AS MANY OF" }
+      }
+    }
   }
 }  
+     
+     --{ "textBox", 10, 3,
+     --  "THE SANCTUARY'S STATUE OF THE GODDESS LAYS TOPPLED AND BROKEN ON THE FLOOR." },
+    -- { "choiceBox", --5,4,--18, 2,
+       --"YOU FIND A SMALL HEALING POTION IN THE LOOTED TREATMENT ROOM. TAKE IT?", "YES", "NO" }
 
 hero = {
   x = 5 ,

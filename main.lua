@@ -72,7 +72,7 @@ end
 function love.keypressed(key, scancode, isrepeat)
   if scene == "map" then
     moveHero(key)
-  elseif scene == "textBox" then
+  elseif scene == "event" then
     eventKeyPressed(key)
   end
 end
@@ -98,7 +98,7 @@ function love.draw()
   love.graphics.pop()
   
   -- draw text box
-  if scene == "textBox" then
+  if scene == "event" then
     drawTextBoxEvent()
   end
   
