@@ -13,7 +13,6 @@ local eventID = 0
 local subeventID = 0
 local eventLog
 
-
 function getEvent(level,x,y)
   eventID = nil
   local checkEvents = function (i,v)
@@ -53,14 +52,31 @@ function eventStep()
     subeventID = subeventID + 1
     if eventLog[subeventID][1] == "textBox" then
       textBox.text = eventLog[subeventID][2]
-    elseif eventLog[subeventID][1] == "branch" then          
-      if not eventLog[subeventID][2] then
+    elseif eventLog[subeventID][1] == "flagBranch" then          
+      if eventLog[subeventID][2] then
         eventLog = eventLog[subeventID][3]
       else
         eventLog = eventLog[subeventID][4]
       end
       subeventID = 0
       eventStep()
+    elseif eventLog[subeventID][1] == "choiceBranch" then
+      if textBox.choiceStatus == 0 then
+        textBox.text = eventLog[subeventID][2]
+        textBox.choice1 = eventLog[subeventID][3]
+        textBox.choice2 = eventLog[subeventID][4]
+        textBox.choiceStatus = 1
+        subeventID = subeventID - 1
+      else
+        eventLog = eventLog[subeventID][textBox.choiceStatus + 4]
+        subeventID = 0
+        textBox.choiceStatus = 0
+        eventStep()
+        
+      --  print("choice 1")--eventLog = eventLog[subeventID][choice + 1]
+      --else
+      --  print("choice 2")--eventLog = eventLog[subeventID][choice + 2]
+      end
     end
   else
     scene = "map"
@@ -68,21 +84,17 @@ function eventStep()
 end
 
 function eventKeyPressed(key)
-  do
- -- if textBox.choiceStatus > 0 then
- --   if key == "up" then 
- --     textBox.choiceStatus = 1
- --   elseif key == "down" then
- --     textBox.choiceStatus = 2
- --   elseif key == "z" then
- --     textBox.choiceStatus = 0
- --     scene = "map"
- --     eventTable[level][textBox.eventID][1] = "NULL"
- --   end
- --   return
- -- --elseif key == "z" then 
- end
-  if key == "z" then   
+  if textBox.choiceStatus > 0 then
+    if key == "up" then 
+      textBox.choiceStatus = 1
+    elseif key == "down" then
+      textBox.choiceStatus = 2
+    elseif key == "z" then
+      eventStep()
+      --eventTable[level][textBox.eventID][1] = "NULL"
+    end
+    return
+  elseif key == "z" then 
     eventStep()
   end
 end
@@ -125,21 +137,19 @@ function drawTextBoxEvent()
   drawTextBox(textBox.text, textBox.X, textBox.Y + y_offset, 
     textBox.WIDTH, textBox.HEIGHT,textBox.BORDER)
   
-  do
---  if textBox.choiceStatus > 0 then
---    local choiceOffset = 0
---    local w,h = 20, 20
---    local c1, c2 = textBox.choice1, textBox.choice2 
---    if textBox.choiceStatus == 1 then
---      c1 = "<" .. textBox.choice1 .. ">"
---      c2 = "  " .. textBox.choice2 .. " "
---    else
---      c1 = "  " .. textBox.choice1 .. " "
---      c2 = "<" .. textBox.choice2 .. ">"
---    end
---    setColor("black")
---    drawTextBox(c1 .. "\n" .. c2, 
---        textBox.X, textBox.Y + y_offset - 60, 60, 50, 2)
---  end
+  if textBox.choiceStatus > 0 then
+    local choiceOffset = 0
+    local w,h = 20, 20
+    local c1, c2 = textBox.choice1, textBox.choice2 
+    if textBox.choiceStatus == 1 then
+      c1 = "<" .. textBox.choice1 .. ">"
+      c2 = "  " .. textBox.choice2 .. " "
+    else
+      c1 = "  " .. textBox.choice1 .. " "
+      c2 = "<" .. textBox.choice2 .. ">"
+    end
+    setColor("black")
+    drawTextBox(c1 .. "\n" .. c2, 
+        textBox.X, textBox.Y + y_offset - 60, 60, 50, 2)
   end
 end

@@ -71,7 +71,36 @@ eventTable = {
       {              -- event log
         { "textBox", "THE PRIEST'S CORPSE LEANS AGAINST THE WALL NEXT TO HIS BED." } ,
         { "textBox", "AN ARROW STICKS OUT OF HIS CHEST." } ,
-        { "branch", true,--flagTable[1][1], 
+        { "choiceBranch", "PET THE DOG?", "YES", "NO",
+          {
+            { "textBox", "BRANCH YES." } ,
+            { "textBox", "BRANCH YES 2." } ,
+            { "choiceBranch", "PET THE CAT?", "YES", "NO",
+              {
+                { "textBox", "BRANCH YES CAT." } ,
+                { "textBox", "BRANCH YES 2 CAT." } ,
+                { "textBox", "BRANCH YES 3 CAT." }
+              } ,
+              {
+                { "textBox", "BRANCH NO CAT." }  
+              }
+            } 
+          } ,
+          {
+            { "textBox", "BRANCH NO." }  
+          }
+        } ,
+        { "choiceBranch", "PET THE DOG?", "YES", "NO",
+          {
+            { "textBox", "BRANCH YES." } ,
+            { "textBox", "BRANCH YES 2." } ,
+            { "textBox", "BRANCH YES 3." }
+          } ,
+          {
+            { "textBox", "BRANCH NO." }  
+          }
+        } ,
+        { "flagBranch", flagTable[1][1], 
           {
             { "textBox", "BRANCH TRUE." } ,
             { "textBox", "BRANCH TRUE 2." } ,
