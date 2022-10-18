@@ -53,11 +53,46 @@ msgTable = {
   }
 }
 
+flagTable = {
+  { -- level 1
+    false, -- first branch test
+    false,
+    false,
+    false,
+    false    
+  }
+}
+
 -- should make it so events can be destructible, invisible
 eventTable = {
   { -- level 1
+    { "deadPriest2", -- event name
+      5, 4,          -- event x and y
+      {              -- event log
+        { "textBox", "THE PRIEST'S CORPSE LEANS AGAINST THE WALL NEXT TO HIS BED." } ,
+        { "textBox", "AN ARROW STICKS OUT OF HIS CHEST." } ,
+        { "branch", true,--flagTable[1][1], 
+          {
+            { "textBox", "BRANCH TRUE." } ,
+            { "textBox", "BRANCH TRUE 2." } ,
+            { "textBox", "BRANCH TRUE 3." }
+          } ,
+          {
+            { "textBox", "BRANCH FALSE." }  
+          }
+        }
+      }
+    } ,  
+  
+    
+    
+    
+    
+    
+    
+    
     { "deadPriest", -- event name
-      5, 4,        -- event x and y
+      15, 4,         -- event x and y
       {              -- event log
         { "textBox", "THE PRIEST'S CORPSE LEANS AGAINST THE WALL NEXT TO HIS BED." } ,
         { "textBox", "AN ARROW STICKS OUT OF HIS CHEST." } ,

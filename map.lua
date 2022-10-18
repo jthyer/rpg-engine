@@ -53,7 +53,7 @@ function updateMap()
     end
   end
 
-  updateEvents()
+  checkEventOverlap()
 end
 
 function drawMap()

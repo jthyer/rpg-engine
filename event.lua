@@ -11,31 +11,82 @@ local textBox = {}
   
 local eventID = 0
 local subeventID = 0
+local eventLog
+
+
+function getEvent(level,x,y)
+  eventID = nil
+  local checkEvents = function (i,v)
+    if x == v[2] and y == v[3] then
+      eventID = i
+    end
+  end
+    
+  iterateTable(eventTable[level],checkEvents)
+  
+  return eventID
+end
+
+function getEventByID(level,eventID)
+  return eventTable[level][eventID]
+end
+
+function getSubEvent(level,eventID,subeventID)
+  return eventTable[level][eventID][4][subeventID]
+end
 
   
-function updateEvents()
+function checkEventOverlap()
   -- check if hero overlaps event
-  do 
-    local checkEvents = function (i,v)
-      if hero.x == v[2] and hero.y == v[3] then
-        eventID = i
-        subeventID = 1
-        scene = "event"
-        textBox.text = eventTable[level][eventID][4][subeventID][2]
-        do
-        --elseif v[1] == "choiceBox" then
-        --  textBox.text = eventTable[level][i][4]
-        --  textBox.choice1 = eventTable[level][i][5]
-        --  textBox.choice2 = eventTable[level][i][6]
-        --  textBox.choiceStatus = 1
-        --  scene = "event"
-        end
-      end
-    end
-    
-    iterateTable(eventTable[level],checkEvents)
-  end 
+  eventID = getEvent(level,hero.x,hero.y)
+  
+  if eventID ~= nil then
+    subeventID = 0
+    scene = "event"
+    eventLog = getEventByID(level,eventID)[4]
+    eventStep()
+  end
 end
+
+function eventStep()
+  if subeventID < #eventLog then
+    subeventID = subeventID + 1
+    if eventLog[subeventID][1] == "textBox" then
+      textBox.text = eventLog[subeventID][2]
+    elseif eventLog[subeventID][1] == "branch" then          
+      if not eventLog[subeventID][2] then
+        eventLog = eventLog[subeventID][3]
+      else
+        eventLog = eventLog[subeventID][4]
+      end
+      subeventID = 0
+      eventStep()
+    end
+  else
+    scene = "map"
+  end
+end
+
+function eventKeyPressed(key)
+  do
+ -- if textBox.choiceStatus > 0 then
+ --   if key == "up" then 
+ --     textBox.choiceStatus = 1
+ --   elseif key == "down" then
+ --     textBox.choiceStatus = 2
+ --   elseif key == "z" then
+ --     textBox.choiceStatus = 0
+ --     scene = "map"
+ --     eventTable[level][textBox.eventID][1] = "NULL"
+ --   end
+ --   return
+ -- --elseif key == "z" then 
+ end
+  if key == "z" then   
+    eventStep()
+  end
+end
+
 
 function drawEvents()
   -- draw events
@@ -63,7 +114,7 @@ function drawTextBox(text, x, y, w, h, b)
 end
 
 function drawTextBoxEvent()
-  --draw text box
+  -- draw text box
   local y_offset 
   if hero.y > 10 then 
     y_offset = 0
@@ -90,32 +141,5 @@ function drawTextBoxEvent()
 --    drawTextBox(c1 .. "\n" .. c2, 
 --        textBox.X, textBox.Y + y_offset - 60, 60, 50, 2)
 --  end
-  end
-end
-
-function eventKeyPressed(key)
-  do
- -- if textBox.choiceStatus > 0 then
- --   if key == "up" then 
- --     textBox.choiceStatus = 1
- --   elseif key == "down" then
- --     textBox.choiceStatus = 2
- --   elseif key == "z" then
- --     textBox.choiceStatus = 0
- --     scene = "map"
- --     eventTable[level][textBox.eventID][1] = "NULL"
- --   end
- --   return
- -- --elseif key == "z" then 
- end
-  if key == "z" then
-    local eventLog = eventTable[level][eventID][4]
-   
-    if subeventID < #eventLog then
-      subeventID = subeventID + 1
-      textBox.text = eventLog[subeventID][2]
-    else
-      scene = "map"
-    end
   end
 end
