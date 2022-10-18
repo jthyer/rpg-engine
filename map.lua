@@ -1,5 +1,3 @@
--- put updateMap into moveHero
-
 local ROOMWIDTH = 20
 local ROOMHEIGHT = 20
 
@@ -105,26 +103,4 @@ function drawMap()
   -- draw room text
   setColor("white")
   love.graphics.printf(message,-50,ROOMHEIGHT*10+8,300,"center")
-end
-
-<<<<<<< HEAD
-=======
-function moveHero(key)
-  if KEYTABLE[key] == nil then
-    return
-  end  
-  
-  -- move hero if no walls in the way
-  local move_x = hero.x + KEYTABLE[key][1]
-  local move_y = hero.y + KEYTABLE[key][2]
-  
-  if move_x > 0 and move_x <= ROOMWIDTH and
-    move_y > 0 and move_y <= ROOMHEIGHT then
-    if levelTable[level][move_y][move_x] ~= 1 then
-      hero.x = move_x
-      hero.y = move_y
-    end
-  end
-  
-  updateMap()
 end
