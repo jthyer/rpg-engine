@@ -128,4 +128,3 @@ function moveHero(key)
   
   updateMap()
 end
->>>>>>> 6c990ee67262b99b16bf128a13eca8a946f62b40
