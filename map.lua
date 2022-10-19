@@ -53,7 +53,7 @@ function updateMap()
     end
   end
 
-  checkEventOverlap()
+  checkEventOverlap() -- shown in event.lua
 end
 
 function drawMap()
@@ -82,7 +82,17 @@ function drawMap()
     iterateTable(objTable[level],drawObject)
   end
   
-  drawEvents()
+  -- draw events
+  do
+    local drawEvent = function (i,v)
+      if v[1] ~= "NULL" then
+        love.graphics.rectangle("fill", (v[2] - 1) * 10+3, (v[3] - 1) * 10 + 3, 4, 4)
+      end
+    end
+    
+    setColor("pink")    
+    iterateTable(eventTable[level], drawEvent)
+  end
 
   -- draw walls, fog of war, hero
   do 

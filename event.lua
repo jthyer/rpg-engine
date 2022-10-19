@@ -2,7 +2,7 @@ local textBox = {}
   textBox.choiceStatus = 0
   textBox.choice1 = ""
   textBox.choice2 = ""
-  textBox.text = eventTable[1][1][4]
+  textBox.text = ""
   textBox.WIDTH = 250
   textBox.HEIGHT = 75
   textBox.X = (300 - textBox.WIDTH) / 2
@@ -12,6 +12,7 @@ local textBox = {}
 local eventID = 0
 local subeventID = 0
 local eventLog
+
 
 function getEvent(level,x,y)
   eventID = nil
@@ -26,15 +27,13 @@ function getEvent(level,x,y)
   return eventID
 end
 
-function getEventByID(level,eventID)
-  return eventTable[level][eventID]
-end
-
-function getSubEvent(level,eventID,subeventID)
-  return eventTable[level][eventID][4][subeventID]
-end
-
-  
+---------------------------------------------------------
+-- EVENT EXECUTION
+--   Some events happen instantly on overlap, others 
+--   iterate over Z presses like text boxes. The event
+--   step function runs recursively to allow for 
+--   branching based on flag values or choices.
+---------------------------------------------------------  
 function checkEventOverlap()
   -- check if hero overlaps event
   eventID = getEvent(level,hero.x,hero.y)
@@ -42,7 +41,7 @@ function checkEventOverlap()
   if eventID ~= nil then
     subeventID = 0
     scene = "event"
-    eventLog = getEventByID(level,eventID)[4]
+    eventLog = eventTable[level][eventID][4]
     eventStep()
   end
 end
@@ -72,13 +71,10 @@ function eventStep()
         subeventID = 0
         textBox.choiceStatus = 0
         eventStep()
-        
-      --  print("choice 1")--eventLog = eventLog[subeventID][choice + 1]
-      --else
-      --  print("choice 2")--eventLog = eventLog[subeventID][choice + 2]
       end
     end
   else
+    eventLog = nil
     scene = "map"
   end
 end
@@ -91,7 +87,6 @@ function eventKeyPressed(key)
       textBox.choiceStatus = 2
     elseif key == "z" then
       eventStep()
-      --eventTable[level][textBox.eventID][1] = "NULL"
     end
     return
   elseif key == "z" then 
@@ -99,21 +94,10 @@ function eventKeyPressed(key)
   end
 end
 
-
-function drawEvents()
-  -- draw events
-  do
-    local drawEvent = function (i,v)
-      if v[1] ~= "NULL" then
-        love.graphics.rectangle("fill", (v[2] - 1) * 10+3, (v[3] - 1) * 10 + 3, 4, 4)
-      end
-    end
-    
-    setColor("pink")    
-    iterateTable(eventTable[level], drawEvent)
-  end
-end
-
+---------------------------------------------------------
+-- DRAW EVENT EXECUTION
+--   Text boxes, choices, screen flashes
+---------------------------------------------------------
 function drawTextBox(text, x, y, w, h, b)  
   setColor("black")
   love.graphics.rectangle("fill",x-b-1,y-b-1,w+(b*2)+2,h+(b*2)+2)
@@ -126,7 +110,6 @@ function drawTextBox(text, x, y, w, h, b)
 end
 
 function drawTextBoxEvent()
-  -- draw text box
   local y_offset 
   if hero.y > 10 then 
     y_offset = 0

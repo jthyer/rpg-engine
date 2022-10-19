@@ -1,19 +1,8 @@
--- defines levelTable, objTable, eventTable, messages hero
--- everything that makes up the actual map is in "levels"
+require("map")
 require("mapData")
 require("event")
-require("map")
+require("eventData")
 
--- next steps:
---  1) implement choices on the text box events 
---   done! 
---   Subtasks a) make responsive to hero position
---            b) show another text box after choice, push hero off event  
---  2) implement a simple inventory
---  3) pick up a key, add it to the inventory, open a locked door
-
--- efficiency changes to do:
---  * Code text box coordinates in load event, not every frame in draw
 
 -- define globals and constants
 level = 1
