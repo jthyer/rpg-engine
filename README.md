@@ -16,46 +16,26 @@ Final Demo Requirements:
   
   
 Remaining Features to Implement:
-
-  (8) make choice box responsive to hero position
-  
- (10) "push" subevent that pushes hero in a specific direction
- 
-  (9) "flash" subevent
-  
-  (9) "sound" subevent for opening doors and traps
-  
-  (1) make tile code into strings
-  
-  (2) turn message code into chars
-  
-  (1) expand map to 32x32
-  
-  (3) add illusory walls ("---SECRET PASSAGE---")
-  
-  (5) add locked door event that branches off flag
-  
-  (5) allow events to be invisible
-  
-  (5) "erase" subevent for erasing event
-  
-  (1) change palette to use windows colors
-  
+- make choice box responsive to hero position #8
+- "push" subevent that pushes hero in a specific direction #10
+- "flash" subevent #9
+- "sound" subevent for opening doors and traps #9
+- make tile code into strings #1
+- turn message code into chars #2
+- expand map to 32x32 #1
+- add illusory walls ("---SECRET PASSAGE---") #3
+- add locked door event that branches off flag #5
+- allow events to be invisible #5
+- "erase" subevent for erasing event #5
+- change palette to use windows colors #1
   
 Once all these features are done, I will be able to make a complete demo dungeon.
 
-
 To build in later versions: 
-
--Combat (Random Encounters and red Boss Events), Leveling, Equipment, Inventory
-
--Text interludes between dungeons, map screen
-
--Save games - track character info, and then flags and fog of war for one dungeon only
-
--Title and Ending Screens
-
--Learn how to make maps with Ogmo
-
+- Combat (Random Encounters and red Boss Events), Leveling, Equipment, Inventory
+- Text interludes between dungeons, map screen
+- Save games - track character info, and then flags and fog of war for one dungeon only
+- Title and Ending Screens
+- Learn how to make maps with Ogmo
 
 The final initial game will be five dungeons, linked together by text screens as the hero slowly tracks down the villain. 
