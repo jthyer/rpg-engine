@@ -1,3 +1,17 @@
+---------------------------------------------------------
+-- EVENTS
+--   Event code is as separate from map code as possible.
+--   An event doesn't care about its location, hence why
+--   event x and y is defined in mapData instead of 
+--   eventData. An event calls a text/choice box, pushes 
+--   the hero, plays a sound, flashes the screen. Event
+--   scenes are wholly separate from map scenes. The only 
+--   outside variables events call are part of the hero 
+--   object defined in main.lua.
+---------------------------------------------------------  
+
+local eventData = require("eventData")
+
 local textBox = {}
   textBox.choiceStatus = 0
   textBox.choice1 = ""
@@ -8,24 +22,11 @@ local textBox = {}
   textBox.X = (300 - textBox.WIDTH) / 2
   textBox.Y = textBox.X + 10
   textBox.BORDER = 2
-  
+
 local eventID = 0
 local subeventID = 0
 local eventLog
-
-
-function getEvent(level,x,y)
-  eventID = nil
-  local checkEvents = function (i,v)
-    if x == v[2] and y == v[3] then
-      eventID = i
-    end
-  end
-    
-  iterateTable(eventTable[level],checkEvents)
-  
-  return eventID
-end
+local flash = 0
 
 ---------------------------------------------------------
 -- EVENT EXECUTION
@@ -34,16 +35,13 @@ end
 --   step function runs recursively to allow for 
 --   branching based on flag values or choices.
 ---------------------------------------------------------  
-function checkEventOverlap()
-  -- check if hero overlaps event
-  eventID = getEvent(level,hero.x,hero.y)
-  
-  if eventID ~= nil then
-    subeventID = 0
-    scene = "event"
-    eventLog = eventTable[level][eventID][4]
-    eventStep()
-  end
+function eventLoad(ID) -- called by map.lua when hero overlaps an events x y
+  eventID = ID
+  subeventID = 0
+  flash = 0
+  scene = "event"
+  eventLog = eventData.eventTable[level][ID] -- defined in eventData.lua
+  eventStep()
 end
 
 function eventStep()
@@ -72,6 +70,12 @@ function eventStep()
         textBox.choiceStatus = 0
         eventStep()
       end
+    elseif eventLog[subeventID][1] == "flash" then
+      flash = 5
+      eventStep()
+    elseif eventLog[subeventID][1] == "erase" then
+      hideEvent(eventID)
+      eventStep()
     end
   else
     eventLog = nil
@@ -79,7 +83,7 @@ function eventStep()
   end
 end
 
-function eventKeyPressed(key)
+function eventKeyPressed(key) -- referenced by main.lua
   if textBox.choiceStatus > 0 then
     if key == "up" then 
       textBox.choiceStatus = 1
@@ -109,12 +113,19 @@ function drawTextBox(text, x, y, w, h, b)
   love.graphics.printf(text,x+10,y+10,w-20,"left")
 end
 
-function drawTextBoxEvent()
+function drawEvent()
   local y_offset 
   if hero.y > 10 then 
     y_offset = 0
   else 
     y_offset = 180 - textBox.HEIGHT
+  end
+
+  if flash > 0 then
+    setColor("red")
+    love.graphics.rectangle("fill",0,0,600,500)
+    setColor("white")
+    flash = flash - 1
   end
 
   drawTextBox(textBox.text, textBox.X, textBox.Y + y_offset, 
@@ -135,4 +146,5 @@ function drawTextBoxEvent()
     drawTextBox(c1 .. "\n" .. c2, 
         textBox.X, textBox.Y + y_offset - 60, 60, 50, 2)
   end
+  
 end

@@ -1,8 +1,21 @@
+---------------------------------------------------------------------
+-- MAPS
+--   Contains all the code to draw the dungeon map. mapData contains
+--   all the walls, tiles, messages, and the locations of events.
+--   The only state that changes with maps is the location of the 
+--   hero, contained in the global hero object. mapData knows the
+--   the location of events, and checks when they overlap the hero
+--   when they do, it calls the eventLoad function to enter the
+--   event scene and run the event.
+---------------------------------------------------------------------
+
 local ROOMWIDTH = 20
 local ROOMHEIGHT = 20
 
+local mapData = require("mapData")
 local fogOfWar = {} 
 local message = ""
+
 
 function loadMap()
   -- initialize fog of war
@@ -28,7 +41,7 @@ function moveHero(key)
   
   if move_x > 0 and move_x <= ROOMWIDTH and
     move_y > 0 and move_y <= ROOMHEIGHT then
-    if levelTable[level][move_y][move_x] ~= 1 then
+    if mapData.levelTable[level][move_y][move_x] ~= 1 then
       hero.x = move_x
       hero.y = move_y
     end
@@ -39,8 +52,8 @@ end
 
 function updateMap()
   -- update message
-  local code = levelTable[level][hero.y][hero.x]
-  message = msgTable[level][code]
+  local code = mapData.levelTable[level][hero.y][hero.x]
+  message = mapData.msgTable[level][code]
   
   --update fog of war
   for i = -1, 1 do
@@ -53,8 +66,23 @@ function updateMap()
     end
   end
 
-  checkEventOverlap() -- shown in event.lua
+  -- check if hero overlaps event
+  -- eventShowTable is mutable eventTable data that hides erased events
+  local eventID
+  local checkEvents = function (i,v)
+    if hero.x == v[2] and hero.y == v[3] and 
+        mapData.eventShowTable[v[1]] then
+      eventID = v[1]
+    end
+  end
+    
+  iterateTable(mapData.eventLocTable[level],checkEvents)  
+  
+  if eventID ~= nil then
+    eventLoad(eventID) -- function in event.lua
+  end
 end
+
 
 function drawMap()
   -- draw pink border and black background
@@ -64,53 +92,51 @@ function drawMap()
   love.graphics.rectangle("fill",0,0,(ROOMWIDTH*10),(ROOMHEIGHT*10))  
 
   -- draw objects
-  do
-    local drawObject = function(i,v)
-      local x = (v[2]-1) * 10
-      local y = (v[3]-1) * 10
-      if v[1] == "doorV" then
-        love.graphics.line(x+4,y,x+4,y+10)
-        love.graphics.line(x+6,y,x+6,y+10)
-      end
-      if v[1] == "doorH" then
-        love.graphics.line(x,y+4,x+10,y+4)
-        love.graphics.line(x,y+6,x+10,y+6)
-      end
+  local drawObject = function(i,v)
+    local x = (v[2]-1) * 10
+    local y = (v[3]-1) * 10
+    if v[1] == "doorV" then
+      love.graphics.line(x+4,y,x+4,y+10)
+      love.graphics.line(x+6,y,x+6,y+10)
     end
- 
-    setColor("pink")
-    iterateTable(objTable[level],drawObject)
+    if v[1] == "doorH" then
+      love.graphics.line(x,y+4,x+10,y+4)
+      love.graphics.line(x,y+6,x+10,y+6)
+    end
   end
+  
+  setColor("pink")
+  iterateTable(mapData.objTable[level],drawObject)
   
   -- draw events
-  do
-    local drawEvent = function (i,v)
-      if v[1] ~= "NULL" then
-        love.graphics.rectangle("fill", (v[2] - 1) * 10+3, (v[3] - 1) * 10 + 3, 4, 4)
-      end
+  local drawEvent = function (i,v)
+    if mapData.eventShowTable[v[1]] then
+      love.graphics.rectangle("fill", (v[2] - 1) * 10+3, (v[3] - 1) * 10 + 3, 4, 4)
     end
-    
-    setColor("pink")    
-    iterateTable(eventTable[level], drawEvent)
-  end
-
-  -- draw walls, fog of war, hero
-  do 
-    local drawRect = function (x,y,w)
-      if w == 1 then
-        love.graphics.rectangle("fill", (x - 1) * 10, (y - 1) * 10, 10, 10)
-      end
-    end
-    
-    setColor("white")
-    iterate2DTable(levelTable[level],drawRect)
-    setColor("grey")
-    iterate2DTable(fogOfWar,drawRect)
-    setColor("yellow")
-    drawRect(hero.x,hero.y,1)
   end
   
-  -- draw room text
+  setColor("pink")    
+  iterateTable(mapData.eventLocTable[level], drawEvent)
+
+  -- draw walls, fog of war, hero
+  local drawRect = function (x,y,w)
+    if w == 1 then
+      love.graphics.rectangle("fill", (x - 1) * 10, (y - 1) * 10, 10, 10)
+    end
+  end
+  
+  setColor("white")
+  iterate2DTable(mapData.levelTable[level],drawRect)
+  setColor("grey")
+  iterate2DTable(fogOfWar,drawRect)
+  setColor("yellow")
+  drawRect(hero.x,hero.y,1)
+  
+  -- draw room message
   setColor("white")
   love.graphics.printf(message,-50,ROOMHEIGHT*10+8,300,"center")
+end
+
+function hideEvent(eventID) -- referenced by event.lua
+  mapData.eventShowTable[eventID] = false
 end

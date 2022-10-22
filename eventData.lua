@@ -1,4 +1,6 @@
-flagTable = {
+local eventData = {}
+
+eventData.flagTable = {
   { -- level 1
     false, -- first branch test
     false,
@@ -8,69 +10,42 @@ flagTable = {
   }
 }
 
-
-eventTable = {
+eventData.eventTable = {
   { -- level 1
-    { "deadPriest2", -- event name
-      5, 4,          -- event x and y
-      {              -- event log
-        { "textBox", "THE PRIEST'S CORPSE LEANS AGAINST THE WALL NEXT TO HIS BED." } ,
-        { "textBox", "AN ARROW STICKS OUT OF HIS CHEST." } ,
-        { "choiceBranch", "PET THE DOG?", "YES", "NO",
-          {
-            { "textBox", "BRANCH YES." } ,
-            { "textBox", "BRANCH YES 2." } ,
-            { "choiceBranch", "PET THE CAT?", "YES", "NO",
-              {
-                { "textBox", "BRANCH YES CAT." } ,
-                { "textBox", "BRANCH YES 2 CAT." } ,
-                { "textBox", "BRANCH YES 3 CAT." }
-              } ,
-              {
-                { "textBox", "BRANCH NO CAT." }  
-              }
-            } 
-          } ,
-          {
-            { "textBox", "BRANCH NO." }  
-          }
+    ["deadPriest"] = { 
+      { "textBox", "AN UNCONSCIOUS PRIEST LIES ON THE STONE FLOOR, WHEEZING FAINTLY. A MASSIVE BLOODY GASH CARVES ACROSS HIS TORSO." } ,
+      { "textBox", "HE'S GRIPPING A SMALL POUCH IN HIS HAND." } ,
+      { "choiceBranch", "TAKE THE POUCH?", "YES", "NO",
+        {
+          { "textBox", "THERE'S 20 GOLD IN THE POUCH." } ,
+          { "erase" }
         } ,
-        { "choiceBranch", "PET THE DOG?", "YES", "NO",
-          {
-            { "textBox", "BRANCH YES." } ,
-            { "textBox", "BRANCH YES 2." } ,
-            { "textBox", "BRANCH YES 3." }
-          } ,
-          {
-            { "textBox", "BRANCH NO." }  
-          }
-        } ,
-        { "flagBranch", flagTable[1][1], 
-          {
-            { "textBox", "BRANCH TRUE." } ,
-            { "textBox", "BRANCH TRUE 2." } ,
-            { "textBox", "BRANCH TRUE 3." }
-          } ,
-          {
-            { "textBox", "BRANCH FALSE." }  
-          }
+        {
         }
       }
-    } ,  
-    { "deadPriest", -- event name
-      15, 4,         -- event x and y
-      {              -- event log
-        { "textBox", "THE PRIEST'S CORPSE LEANS AGAINST THE WALL NEXT TO HIS BED." } ,
-        { "textBox", "AN ARROW STICKS OUT OF HIS CHEST." } ,
-        { "textBox", "IT'S VERY SAD." } --,
-       -- { "textBox", "THE PRIEST WAS YOUR DAD, PLOT TWIST." } ,
-       -- { "textBox", "WOW I CAN REALLY PUT AS MANY OF" }
-      }
-    }
+    } ,
+    ["fearfulDog"] = {
+      { "textBox", "A SMALL DOG WHIMPERS NEAR THE BODY OF A NUN WITH A CAVED-IN SKULL." } ,
+      { "choiceBranch", "COMFORT THE DOG?", "YES", "NO",
+        {
+          { "textBox", "YOU MURMUR SOOTHINGLY TO THE FRIGHTENED ANIMAL. HE SEEMS TO CALM DOWN." } ,
+          { "choiceBranch", "PET THE DOG?", "YES", "NO",
+            { 
+              { "textBox", "YOU REACH OUT TO STROKE THE DOG'S FUR." } ,
+              { "flash" } ,
+              { "textBox", "HE QUICKLY SNARLS, AND BEFORE YOU CAN PULL AWAY HE GIVES YOU A NASTY BITE." } ,
+              { "textBox", "THE DOG RUNS OFF, BARKING." } ,
+              { "erase" }
+            } ,
+            {
+            } 
+          }
+        } ,
+        {
+        }
+      } 
+    } 
   }
 }  
-     
-     --{ "textBox", 10, 3,
-     --  "THE SANCTUARY'S STATUE OF THE GODDESS LAYS TOPPLED AND BROKEN ON THE FLOOR." },
-    -- { "choiceBox", --5,4,--18, 2,
-       --"YOU FIND A SMALL HEALING POTION IN THE LOOTED TREATMENT ROOM. TAKE IT?", "YES", "NO" }
+
+return eventData

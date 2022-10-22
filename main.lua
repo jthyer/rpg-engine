@@ -1,29 +1,15 @@
 require("map")
-require("mapData")
 require("event")
-require("eventData")
+require("util")
 
-
--- define globals and constants
+-- define globals
 level = 1
 scene = "map"
 
-KEYTABLE = {
-  ["left"]  = {-1, 0},
-  ["up"]    = { 0,-1},
-  ["right"] = { 1, 0},
-  ["down"]  = { 0, 1},
-  ["Z"]     = { 0, 0}
+hero = {
+  x = 5 ,
+  y = 2
 }
-
-COLORTABLE = {
-  ["white"]  = { 1,1,1 },
-  ["black"]  = { 0,0,0 },
-  ["pink"]   = { 1,0,1 },
-  ["yellow"] = { 1,1,0 },
-  ["grey"] = {.8,.8,.8 }
-}
-
 
 function love.load()
   -- window settings
@@ -36,22 +22,6 @@ function love.load()
   
   loadMap()
 end
-
--- iterating tables used by map and event functions
-function iterateTable(T, func)
-  for i, v in ipairs(T) do
-    func(i,v)
-  end
-end
-
-function iterate2DTable(T, func)
-  for i, v in ipairs(T) do
-    for j, w in ipairs(T[i]) do
-      func(j,i,w,v)
-    end
-  end
-end
-
 
 function love.update()  
   -- since this game is turn based, the state only needs
@@ -66,19 +36,13 @@ function love.keypressed(key, scancode, isrepeat)
   end
 end
 
-
-function setColor(c)
-  -- used by all draw events
-  love.graphics.setColor(COLORTABLE[c][1],COLORTABLE[c][2],COLORTABLE[c][3])
-end
-
 function love.draw()
   -- set scale to x2
   love.graphics.push()
   love.graphics.scale(2, 2)
     
   -- translate to middle of screen
-  -- always draw map, textBox and battle take place on top of map
+  -- always draw map, events and battles take place on top of map
   love.graphics.push()
   love.graphics.translate(50,25)
   
@@ -86,9 +50,9 @@ function love.draw()
   
   love.graphics.pop()
   
-  -- draw text box
+  -- draw event
   if scene == "event" then
-    drawTextBoxEvent()
+    drawEvent()
   end
   
   -- pop x2 scale

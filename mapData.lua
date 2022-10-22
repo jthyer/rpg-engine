@@ -1,4 +1,6 @@
-levelTable = { 
+local map = {}
+
+map.levelTable = { 
   { -- level 1
     { 1,1,1,1,2,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1 } ,
     { 1,1,1,1,2,1,1,1,1,1, 1,1,1,1,6,6,6,6,1,1 } ,
@@ -26,7 +28,7 @@ levelTable = {
   }
 }
 
-objTable = { 
+map.objTable = { 
   { -- level 1
     { "doorH", 5, 1 } , 
     { "doorV", 4, 6 } ,
@@ -42,7 +44,20 @@ objTable = {
   } 
 }
 
-msgTable = {
+-- mutable
+map.eventShowTable = {
+  ["deadPriest"] = true,
+  ["fearfulDog"] = true
+}
+
+map.eventLocTable = {
+  { -- level 1
+    { "deadPriest", 2, 5 } ,
+    { "fearfulDog", 13, 3 }
+  }
+}
+
+map.msgTable = {
   { -- level 1
      [0] = "" ,
      [2] = "---ENTRANCE HALL---",
@@ -53,8 +68,4 @@ msgTable = {
   }
 }
 
-
-hero = {
-  x = 5 ,
-  y = 2
-}
+return map
