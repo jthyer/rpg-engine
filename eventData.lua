@@ -1,16 +1,4 @@
-local eventData = {}
-
-eventData.flagTable = {
-  { -- level 1
-    false, -- first branch test
-    false,
-    false,
-    false,
-    false    
-  }
-}
-
-eventData.eventTable = {
+local EVENTDATA = {
   { -- level 1
     ["deadPriest"] = { 
       { "textBox", "AN UNCONSCIOUS PRIEST LIES ON THE STONE FLOOR, WHEEZING FAINTLY. A MASSIVE BLOODY GASH CARVES ACROSS HIS TORSO." } ,
@@ -48,4 +36,4 @@ eventData.eventTable = {
   }
 }  
 
-return eventData
+return EVENTDATA

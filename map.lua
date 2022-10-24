@@ -14,6 +14,8 @@ local ROOMHEIGHT = 20
 
 local mapData = require("mapData")
 local fogOfWar = {} 
+local flags = {}
+local eventStatus = mapData.eventStatus
 local message = ""
 
 
@@ -25,6 +27,11 @@ function loadMap()
       table.insert(row, 1)
     end
     table.insert(fogOfWar,row)
+  end
+  
+  -- initialize fog of war
+  for i = 1, 20 do
+    table.insert(flags,false)
   end
   
   updateMap()
@@ -67,11 +74,11 @@ function updateMap()
   end
 
   -- check if hero overlaps event
-  -- eventShowTable is mutable eventTable data that hides erased events
   local eventID
   local checkEvents = function (i,v)
     if hero.x == v[2] and hero.y == v[3] and 
-        mapData.eventShowTable[v[1]] then
+        (eventStatus[v[1]] == 0 or eventStatus[v[1]] == 1) then
+      print(hero.x .. " " .. hero.y .. " " .. v[1]..v[2]..v[3])
       eventID = v[1]
     end
   end
@@ -110,7 +117,7 @@ function drawMap()
   
   -- draw events
   local drawEvent = function (i,v)
-    if mapData.eventShowTable[v[1]] then
+    if eventStatus[v[1]] == 1 then
       love.graphics.rectangle("fill", (v[2] - 1) * 10+3, (v[3] - 1) * 10 + 3, 4, 4)
     end
   end
@@ -137,6 +144,15 @@ function drawMap()
   love.graphics.printf(message,-50,ROOMHEIGHT*10+8,300,"center")
 end
 
-function hideEvent(eventID) -- referenced by event.lua
-  mapData.eventShowTable[eventID] = false
+-- Event functions referenced by event.lua
+function getFlag(i)
+  return flags[i]
+end
+  
+function setFlag(i,b)
+  flags[i] = b
+end
+
+function eraseEvent(eventID,s) 
+  eventStatus[eventID] = -1
 end

@@ -44,10 +44,11 @@ map.objTable = {
   } 
 }
 
--- mutable
-map.eventShowTable = {
-  ["deadPriest"] = true,
-  ["fearfulDog"] = true
+-- initial event status
+-- 1 = show, 0 = hide, -1 = erase
+map.eventStatus = {
+  ["deadPriest"] = 1,
+  ["fearfulDog"] = 1
 }
 
 map.eventLocTable = {

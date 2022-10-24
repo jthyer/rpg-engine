@@ -16,16 +16,13 @@ Final Demo Requirements:
   
   
 Remaining Features to Implement:
-- make choice box responsive to hero position #8
 - "push" subevent that pushes hero in a specific direction #10
-- "flash" subevent #9
 - "sound" subevent for opening doors and traps #9
 - make tile code into strings #1
 - turn message code into chars #2
 - expand map to 32x32 #1
 - add illusory walls ("---SECRET PASSAGE---") #3
 - add locked door event that branches off flag #5
-- allow events to be invisible #5
 - "erase" subevent for erasing event #5
 - change palette to use windows colors #1
   

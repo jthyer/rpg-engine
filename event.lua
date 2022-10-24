@@ -3,14 +3,14 @@
 --   Event code is as separate from map code as possible.
 --   An event doesn't care about its location, hence why
 --   event x and y is defined in mapData instead of 
---   eventData. An event calls a text/choice box, pushes 
+--   EVENTDATA. An event calls a text/choice box, pushes 
 --   the hero, plays a sound, flashes the screen. Event
 --   scenes are wholly separate from map scenes. The only 
 --   outside variables events call are part of the hero 
 --   object defined in main.lua.
 ---------------------------------------------------------  
 
-local eventData = require("eventData")
+local EVENTDATA = require("EVENTDATA")
 
 local textBox = {}
   textBox.choiceStatus = 0
@@ -40,7 +40,7 @@ function eventLoad(ID) -- called by map.lua when hero overlaps an events x y
   subeventID = 0
   flash = 0
   scene = "event"
-  eventLog = eventData.eventTable[level][ID] -- defined in eventData.lua
+  eventLog = EVENTDATA[level][ID] -- defined in EVENTDATA.lua
   eventStep()
 end
 
@@ -74,7 +74,7 @@ function eventStep()
       flash = 5
       eventStep()
     elseif eventLog[subeventID][1] == "erase" then
-      hideEvent(eventID)
+      eraseEvent(eventID) -- function in map.lua
       eventStep()
     end
   else
