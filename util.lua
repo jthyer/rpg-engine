@@ -11,12 +11,22 @@ KEYTABLE = {
 }
 
 COLORTABLE = {
-  ["white"]  = { 1,1,1 },
-  ["black"]  = { 0,0,0 },
-  ["pink"]   = { 1,0,1 },
-  ["yellow"] = { 1,1,0 },
-  ["red"]    = { 1,0,0 },
-  ["grey"] = {.8,.8,.8 }
+  ["white"]      = { 1,1,1 },
+  ["grey"]       = {.75,.75,.75 },
+  ["teal"]       = { 0,1,1 },
+  ["darkTeal"]   = { 0,.5,.5 },
+  ["pink"]       = { 1,0,1 },
+  ["darkPink"]   = { .5,0,5 },
+  ["blue"]       = { 0,0,1 },
+  ["darkBlue"]   = { 0,0,.5 },
+  ["yellow"]     = { 1,1,0 },
+  ["darkYellow"] = { .5,.5,0 },
+  ["green"]        = { 0,1,0 },
+  ["darkGreen"]    = { 0,.5,0 },
+  ["red"]        = { 1,0,0 },
+  ["darkRed"]    = { .5,0,0 },
+  ["darkGrey"]   = { .5,.5,.5 },
+  ["black"]      = { 0,0,0 },
 }
 
 -- iterating tables used by map and event functions

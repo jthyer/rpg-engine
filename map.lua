@@ -10,8 +10,12 @@
 --
 ------------------------------------------------------------------------
 
-local ROOMWIDTH = 20
-local ROOMHEIGHT = 20
+local ROOMWIDTH = 30
+local ROOMHEIGHT = 30
+local TILEWIDTH = 6
+local TILEHEIGHT = 6
+local BORDERHEIGHT = 3
+local BORDERWIDTH = 3
 
 local MAPDATA = require("mapData")
 local fogOfWar = {} 
@@ -77,10 +81,6 @@ function updateMap()
   if eventID ~= nil then
     eventLoad(eventID) -- function in event.lua
   end
-    
-  -- update message
-  local code = MAPDATA.levelTable[level][hero.y][hero.x]
-  message = MAPDATA.msgTable[level][code]
   
   --update fog of war
   for i = -1, 1 do
@@ -92,47 +92,51 @@ function updateMap()
       end
     end
   end
+  
+  -- update message
+  local code = MAPDATA.levelTable[level][hero.y][hero.x]
+  message = MAPDATA.msgTable[level][code]
 end
 
 
 function drawMap()
-  -- draw pink border and black background
-  setColor("pink")
-  love.graphics.rectangle("fill",-5,-5,(ROOMWIDTH*10)+10,(ROOMHEIGHT*10)+10)
+  -- draw border
+  setColor("white")
+  love.graphics.rectangle("fill",-BORDERWIDTH,-BORDERHEIGHT,(2*BORDERWIDTH)+ROOMWIDTH*TILEWIDTH,(2*BORDERHEIGHT)+ROOMHEIGHT*TILEHEIGHT)
   setColor("black")
-  love.graphics.rectangle("fill",0,0,(ROOMWIDTH*10),(ROOMHEIGHT*10))  
+  love.graphics.rectangle("fill",0,0,ROOMWIDTH*TILEWIDTH,ROOMHEIGHT*TILEHEIGHT)  
 
   -- draw objects
   local drawObject = function(i,v)
     local x = (v[2]-1) * 10
     local y = (v[3]-1) * 10
     if v[1] == "doorV" then
-      love.graphics.line(x+4,y,x+4,y+10)
-      love.graphics.line(x+6,y,x+6,y+10)
+      --love.graphics.line(x+4,y,x+4,y+10)
+      --love.graphics.line(x+6,y,x+6,y+10)
     end
     if v[1] == "doorH" then
-      love.graphics.line(x,y+4,x+10,y+4)
-      love.graphics.line(x,y+6,x+10,y+6)
+      --love.graphics.line(x,y+4,x+10,y+4)
+      --love.graphics.line(x,y+6,x+10,y+6)
     end
   end
   
-  setColor("pink")
+  setColor("teal")
   iterateTable(MAPDATA.objTable[level],drawObject)
   
   -- draw events
   local drawEvent = function (i,v)
     if eventStatus[v[1]] == 1 then
-      love.graphics.rectangle("fill", (v[2] - 1) * 10+3, (v[3] - 1) * 10 + 3, 4, 4)
+      love.graphics.rectangle("fill", (v[2] - 1) * TILEWIDTH+3, (v[3] - 1) * TILEHEIGHT + 3, 2, 2)
     end
   end
   
-  setColor("pink")    
+  setColor("teal")    
   iterateTable(MAPDATA.eventLocTable[level], drawEvent)
 
   -- draw walls, fog of war, hero
   local drawRect = function (x,y,w)
     if w == 1 then
-      love.graphics.rectangle("fill", (x - 1) * 10, (y - 1) * 10, 10, 10)
+      love.graphics.rectangle("fill", (x - 1) * TILEWIDTH, (y - 1) * TILEHEIGHT, TILEWIDTH, TILEHEIGHT)
     end
   end
   
@@ -142,10 +146,24 @@ function drawMap()
   iterate2DTable(fogOfWar,drawRect)
   setColor("yellow")
   drawRect(hero.x,hero.y,1)
-  
+
+  love.graphics.setLineWidth(1)
+  setColor("black")
+  love.graphics.line(-BORDERWIDTH,-BORDERHEIGHT,(ROOMWIDTH*TILEWIDTH)+BORDERWIDTH,-BORDERHEIGHT)
+  love.graphics.line(-BORDERWIDTH,-BORDERHEIGHT,-BORDERWIDTH,(ROOMHEIGHT*TILEHEIGHT)+BORDERHEIGHT)
+  love.graphics.line(0,ROOMHEIGHT*TILEHEIGHT,ROOMWIDTH*TILEWIDTH,ROOMHEIGHT*TILEHEIGHT)
+  love.graphics.line(ROOMWIDTH*TILEWIDTH,0,ROOMWIDTH*TILEWIDTH,ROOMHEIGHT*TILEHEIGHT)
+  setColor("black")
+  love.graphics.line(-BORDERWIDTH,(ROOMHEIGHT*TILEHEIGHT)+BORDERHEIGHT,(ROOMWIDTH*TILEHEIGHT)+BORDERWIDTH,(ROOMHEIGHT*TILEHEIGHT)+BORDERHEIGHT)
+  love.graphics.line((ROOMWIDTH*TILEWIDTH)+BORDERWIDTH,-BORDERHEIGHT,(ROOMWIDTH*TILEHEIGHT)+BORDERWIDTH,(ROOMHEIGHT*TILEHEIGHT)+BORDERHEIGHT)
+  love.graphics.line(0,0,0,ROOMHEIGHT*TILEHEIGHT)
+  love.graphics.line(0,0,ROOMWIDTH*TILEWIDTH,0)
+end
+
+function drawMessage()
   -- draw room message
   setColor("white")
-  love.graphics.printf(message,-50,ROOMHEIGHT*10+8,300,"center")
+  love.graphics.printf(message,0,205,212,"center")
 end
 
 -- Event functions referenced by event.lua

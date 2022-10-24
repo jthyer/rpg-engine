@@ -36,18 +36,29 @@ function love.keypressed(key, scancode, isrepeat)
 end
 
 function love.draw()
-  -- set scale to x2
+   -- set scale to x2
   love.graphics.push()
   love.graphics.scale(2, 2)
-    
+ 
+ -- background color
+  local i = 0
+  while (i < 225) do
+    setColor("darkTeal")
+    love.graphics.line(0,i,600,i)  
+    setColor("black")
+    love.graphics.line(0,i+1,600,i+1)
+    i = i + 2
+  end 
+ 
   -- translate to middle of screen
   -- always draw map, events and battles take place on top of map
   love.graphics.push()
-  love.graphics.translate(50,25)
-  
+  love.graphics.translate(16,16)  
   drawMap()  
-  
   love.graphics.pop()
+  
+  -- draw room message
+  drawMessage()
   
   -- draw event
   if scene == "event" then
