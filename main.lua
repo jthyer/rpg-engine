@@ -5,7 +5,6 @@ require("util")
 -- define globals
 level = 1
 scene = "map"
-
 hero = {
   x = 5 ,
   y = 2

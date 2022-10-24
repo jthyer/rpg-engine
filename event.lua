@@ -2,7 +2,7 @@
 -- EVENTS
 --   Event code is as separate from map code as possible.
 --   An event doesn't care about its location, hence why
---   event x and y is defined in mapData instead of 
+--   event x and y is defined in MAPDATA instead of 
 --   EVENTDATA. An event calls a text/choice box, pushes 
 --   the hero, plays a sound, flashes the screen. Event
 --   scenes are wholly separate from map scenes. The only 
@@ -49,8 +49,11 @@ function eventStep()
     subeventID = subeventID + 1
     if eventLog[subeventID][1] == "textBox" then
       textBox.text = eventLog[subeventID][2]
+    elseif eventLog[subeventID][1] == "flagSet" then  
+      setFlag("snakeRepellant", true) -- defined in map.lua
+      eventStep()
     elseif eventLog[subeventID][1] == "flagBranch" then          
-      if eventLog[subeventID][2] then
+      if getFlag(eventLog[subeventID][2]) then
         eventLog = eventLog[subeventID][3]
       else
         eventLog = eventLog[subeventID][4]
@@ -72,6 +75,10 @@ function eventStep()
       end
     elseif eventLog[subeventID][1] == "flash" then
       flash = 5
+      eventStep()
+    elseif eventLog[subeventID][1] == "push" then
+      hero.x = hero.x + eventLog[subeventID][2]
+      hero.y = hero.y + eventLog[subeventID][3]
       eventStep()
     elseif eventLog[subeventID][1] == "erase" then
       eraseEvent(eventID) -- function in map.lua

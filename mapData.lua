@@ -1,6 +1,8 @@
-local map = {}
+-- MAPDATA should be immutable. These tables are not edited anywhere, only referenced.
 
-map.levelTable = { 
+local MAP = {}
+
+MAP.levelTable = { 
   { -- level 1
     { 1,1,1,1,2,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1 } ,
     { 1,1,1,1,2,1,1,1,1,1, 1,1,1,1,6,6,6,6,1,1 } ,
@@ -28,7 +30,7 @@ map.levelTable = {
   }
 }
 
-map.objTable = { 
+MAP.objTable = { 
   { -- level 1
     { "doorH", 5, 1 } , 
     { "doorV", 4, 6 } ,
@@ -46,19 +48,23 @@ map.objTable = {
 
 -- initial event status
 -- 1 = show, 0 = hide, -1 = erase
-map.eventStatus = {
-  ["deadPriest"] = 1,
-  ["fearfulDog"] = 1
-}
-
-map.eventLocTable = {
+MAP.eventStatus = {
   { -- level 1
-    { "deadPriest", 2, 5 } ,
-    { "fearfulDog", 13, 3 }
+    { "deadPriest", 1 } ,
+    { "fearfulDog", 1 } ,
+    { "snakes", 0 } ,
   }
 }
 
-map.msgTable = {
+MAP.eventLocTable = {
+  { -- level 1
+    { "deadPriest", 2, 5 } ,
+    { "fearfulDog", 13, 3 } ,
+    { "snakes", 15, 3 } ,
+  }
+}
+
+MAP.msgTable = {
   { -- level 1
      [0] = "" ,
      [2] = "---ENTRANCE HALL---",
@@ -69,4 +75,4 @@ map.msgTable = {
   }
 }
 
-return map
+return MAP

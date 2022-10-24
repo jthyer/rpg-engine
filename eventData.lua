@@ -1,3 +1,5 @@
+-- EVENTDATA should be immutable. These tables are not edited anywhere, only referenced.
+
 local EVENTDATA = {
   { -- level 1
     ["deadPriest"] = { 
@@ -5,10 +7,13 @@ local EVENTDATA = {
       { "textBox", "HE'S GRIPPING A SMALL POUCH IN HIS HAND." } ,
       { "choiceBranch", "TAKE THE POUCH?", "YES", "NO",
         {
-          { "textBox", "THERE'S 20 GOLD IN THE POUCH." } ,
-          { "erase" }
+          { "textBox", "THERE'S SNAKE REPELLANT IN THE POUCH." } ,
+          { "flagSet", "snakeRepellant" } ,
+          { "erase" } ,
         } ,
         {
+          { "push" , 0, 1 } ,
+          { "textBox", "THE PRIEST GETS UP AND PUSHES YOU BACK, THEN COLLAPSES BACK TO THE FLOOR." } ,
         }
       }
     } ,
@@ -32,7 +37,20 @@ local EVENTDATA = {
         {
         }
       } 
-    } 
+    } ,
+    [ "snakes" ] = {
+      { "flagBranch" , "snakeRepellant",
+        {
+          { "push", 0, 1 } ,
+          { "textBox", "YOU SPRAY DOWN THE ROOM WITH SNAKE REPELLANT. ALL THE SNAKES FLEE IN TERROR." } ,
+          { "erase" } ,
+        } ,
+        {
+          { "push", 0, 1 } ,
+          { "textBox", "THIS ROOM IS FULL OF SNAKES. YOU BACK AWAY, SLOWLY." } ,
+        }
+      } ,
+    } ,
   }
 }  
 

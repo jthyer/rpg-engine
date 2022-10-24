@@ -1,23 +1,23 @@
----------------------------------------------------------------------
+------------------------------------------------------------------------
 -- MAPS
---   Contains all the code to draw the dungeon map. mapData contains
+--   Contains all the code to draw the dungeon map. MAPDATA contains
 --   all the walls, tiles, messages, and the locations of events.
---   The only state that changes with maps is the location of the 
---   hero, contained in the global hero object. mapData knows the
---   the location of events, and checks when they overlap the hero
---   when they do, it calls the eventLoad function to enter the
---   event scene and run the event.
----------------------------------------------------------------------
+--   This file tracks map state, including hero, event status (visible, 
+--   hidden, erased), flags, the current message, and fog of war.
+--   MAPDATA knows the the location of events, and checks when they 
+--   overlap the hero when they do, it calls the eventLoad function 
+--   to enter the event scene and run the event.
+--
+------------------------------------------------------------------------
 
 local ROOMWIDTH = 20
 local ROOMHEIGHT = 20
 
-local mapData = require("mapData")
+local MAPDATA = require("mapData")
 local fogOfWar = {} 
 local flags = {}
-local eventStatus = mapData.eventStatus
+local eventStatus = {}
 local message = ""
-
 
 function loadMap()
   -- initialize fog of war
@@ -34,6 +34,11 @@ function loadMap()
     table.insert(flags,false)
   end
   
+  -- initialize event status
+  for i,v in ipairs(MAPDATA.eventStatus[level]) do
+    eventStatus[v[1]] = v[2]
+  end
+  
   updateMap()
 end
 
@@ -48,7 +53,7 @@ function moveHero(key)
   
   if move_x > 0 and move_x <= ROOMWIDTH and
     move_y > 0 and move_y <= ROOMHEIGHT then
-    if mapData.levelTable[level][move_y][move_x] ~= 1 then
+    if MAPDATA.levelTable[level][move_y][move_x] ~= 1 then
       hero.x = move_x
       hero.y = move_y
     end
@@ -58,9 +63,24 @@ function moveHero(key)
 end
 
 function updateMap()
+  -- check if hero overlaps event
+  local eventID
+  local checkEvents = function (i,v)
+    if hero.x == v[2] and hero.y == v[3] and 
+        (eventStatus[v[1]] == 0 or eventStatus[v[1]] == 1) then
+      eventID = v[1]
+    end
+  end
+
+  iterateTable(MAPDATA.eventLocTable[level],checkEvents)  
+
+  if eventID ~= nil then
+    eventLoad(eventID) -- function in event.lua
+  end
+    
   -- update message
-  local code = mapData.levelTable[level][hero.y][hero.x]
-  message = mapData.msgTable[level][code]
+  local code = MAPDATA.levelTable[level][hero.y][hero.x]
+  message = MAPDATA.msgTable[level][code]
   
   --update fog of war
   for i = -1, 1 do
@@ -71,22 +91,6 @@ function updateMap()
         fogOfWar[y][x] = 0
       end
     end
-  end
-
-  -- check if hero overlaps event
-  local eventID
-  local checkEvents = function (i,v)
-    if hero.x == v[2] and hero.y == v[3] and 
-        (eventStatus[v[1]] == 0 or eventStatus[v[1]] == 1) then
-      print(hero.x .. " " .. hero.y .. " " .. v[1]..v[2]..v[3])
-      eventID = v[1]
-    end
-  end
-    
-  iterateTable(mapData.eventLocTable[level],checkEvents)  
-  
-  if eventID ~= nil then
-    eventLoad(eventID) -- function in event.lua
   end
 end
 
@@ -113,7 +117,7 @@ function drawMap()
   end
   
   setColor("pink")
-  iterateTable(mapData.objTable[level],drawObject)
+  iterateTable(MAPDATA.objTable[level],drawObject)
   
   -- draw events
   local drawEvent = function (i,v)
@@ -123,7 +127,7 @@ function drawMap()
   end
   
   setColor("pink")    
-  iterateTable(mapData.eventLocTable[level], drawEvent)
+  iterateTable(MAPDATA.eventLocTable[level], drawEvent)
 
   -- draw walls, fog of war, hero
   local drawRect = function (x,y,w)
@@ -133,7 +137,7 @@ function drawMap()
   end
   
   setColor("white")
-  iterate2DTable(mapData.levelTable[level],drawRect)
+  iterate2DTable(MAPDATA.levelTable[level],drawRect)
   setColor("grey")
   iterate2DTable(fogOfWar,drawRect)
   setColor("yellow")
@@ -145,12 +149,12 @@ function drawMap()
 end
 
 -- Event functions referenced by event.lua
-function getFlag(i)
-  return flags[i]
+function getFlag(s)
+  return flags[s]
 end
   
-function setFlag(i,b)
-  flags[i] = b
+function setFlag(s,b)
+  flags[s] = b
 end
 
 function eraseEvent(eventID,s) 
