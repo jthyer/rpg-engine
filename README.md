@@ -21,7 +21,6 @@ Remaining Features to Implement:
 - turn message code into chars #2
 - expand map to 32x32 #1
 - add illusory walls ("---SECRET PASSAGE---") #3
-- change palette to use windows colors #1
   
 Once all these features are done, I will be able to make a complete demo dungeon.
 

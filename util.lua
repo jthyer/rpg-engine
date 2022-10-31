@@ -44,6 +44,17 @@ function iterate2DTable(T, func)
   end
 end
 
+-- draw borders
+function drawBorder(x, y, w, h)
+  setColor("black")
+  love.graphics.rectangle("fill",x-4,y-4,w+8,h+8)
+  setColor("white")
+  love.graphics.rectangle("fill",x-3,y-3,w+6,h+6)
+  setColor("black")
+  love.graphics.rectangle("fill",x-1,y-1,w+2,h+2)
+  setColor("white")  
+end
+
 -- used by all draw events
 function setColor(c)
   love.graphics.setColor(COLORTABLE[c][1],COLORTABLE[c][2],COLORTABLE[c][3])

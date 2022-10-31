@@ -1,5 +1,6 @@
 require("map")
 require("event")
+require("ui")
 require("util")
 
 -- define globals
@@ -13,6 +14,7 @@ hero = {
 function love.load()
   -- window settings
   love.graphics.setDefaultFilter("nearest", "nearest", 1)
+  love.graphics.setLineStyle("rough")
   love.window.setTitle("Custom RPG Engine")
 
   -- set font
@@ -44,21 +46,30 @@ function love.draw()
   local i = 0
   while (i < 225) do
     setColor("darkTeal")
-    love.graphics.line(0,i,600,i)  
+    love.graphics.line(0,i,300,i)  
     setColor("black")
-    love.graphics.line(0,i+1,600,i+1)
+    love.graphics.line(0,i+1,300,i+1)
     i = i + 2
   end 
  
   -- translate to middle of screen
   -- always draw map, events and battles take place on top of map
   love.graphics.push()
-  love.graphics.translate(16,16)  
+  love.graphics.translate(16,8+1)  
   drawMap()  
   love.graphics.pop()
   
+  -- draw UI
+  love.graphics.push()
+  love.graphics.translate(16+180+12,8+1)  
+  drawUI()  
+  love.graphics.pop()
+  
   -- draw room message
+  love.graphics.push()
+  love.graphics.translate(16,180+20+1)  
   drawMessage()
+  love.graphics.pop()
   
   -- draw event
   if scene == "event" then
