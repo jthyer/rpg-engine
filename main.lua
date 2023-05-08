@@ -1,6 +1,6 @@
 require("map")
 require("event")
-require("ui")
+-- require("ui")
 require("util")
 
 -- define globals
@@ -62,7 +62,7 @@ function love.draw()
   -- draw UI
   love.graphics.push()
   love.graphics.translate(16+180+12,8+1)  
-  drawUI()  
+ -- drawUI()  
   love.graphics.pop()
   
   -- draw room message

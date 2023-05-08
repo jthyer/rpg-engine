@@ -10,7 +10,7 @@
 --   object defined in main.lua, and flag manipulation in
 --   map.lua.
 ---------------------------------------------------------  
-local EVENTDATA = require("EVENTDATA")
+local EVENTDATA = require("eventData")
 
 local textBox = {}
   textBox.choiceStatus = 0
