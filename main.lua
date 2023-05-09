@@ -1,5 +1,6 @@
 require("map")
 require("event")
+require("battle")
 require("ui") 
 require("util")
 

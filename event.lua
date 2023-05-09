@@ -20,7 +20,8 @@ local textBox = {}
   textBox.text = ""
 
 local eventID = 0
-local subeventID = 0
+local subEventID = { 0 }
+local subEventIDItr = 1
 local eventLog
 local flash = 0
 
@@ -35,14 +36,14 @@ function eventLoad(ID) -- called by map.lua when hero overlaps an events x y
   scene = "event" 
 
   eventID = ID
-  subeventID = 0
+  subEventID = { 0 } 
   flash = 0
   eventLog = EVENTDATA[level][ID] -- defined in EVENTDATA.lua
   eventStep()
 end
 
 eventExec["textBox"] = function(subEvent)
-  textBox.text = eventLog[subeventID][2]
+  textBox.text = eventLog[subEventID[subEventIDItr]][2]
   return false
 end
 
@@ -57,7 +58,7 @@ eventExec["flagBranch"] = function(subEvent)
   else
     eventLog = subEvent[4]
   end
-  subeventID = 0
+  subEventID[subEventIDItr] = 0
   return true
 end
 
@@ -67,11 +68,11 @@ eventExec["choiceBranch"] = function(subEvent)
     textBox.choice1 = subEvent[3]
     textBox.choice2 = subEvent[4]
     textBox.choiceStatus = 1
-    subeventID = subeventID - 1
+    subEventID[subEventIDItr] = subEventID[subEventIDItr] - 1
     return false
   else
     eventLog = subEvent[textBox.choiceStatus + 4]
-    subeventID = 0
+    subEventID[subEventIDItr] = 0
     textBox.choiceStatus = 0
     return true
   end
@@ -93,10 +94,15 @@ eventExec["erase"] = function(subEvent)
   return true
 end
 
+eventExec["battle"] = function(subEvent)
+  table.insert(eventLog,subEventID[subEventIDItr]+1,initBattleEvent())
+  return true
+end
+
 function eventStep()
-  if subeventID < #eventLog then
-    subeventID = subeventID + 1
-    local subEvent = eventLog[subeventID]
+  if subEventID[subEventIDItr] < #eventLog then
+    subEventID[subEventIDItr] = subEventID[subEventIDItr] + 1
+    local subEvent = eventLog[subEventID[subEventIDItr]]
     local step = eventExec[subEvent[1]](subEvent) 
     if step then eventStep() end
   else
