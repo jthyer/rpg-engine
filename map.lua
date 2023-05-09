@@ -29,7 +29,8 @@ function loadMap()
     table.insert(fogOfWar,row)
   end
   
-  -- initialize fog of war
+  -- initialize flags
+  -- flags shouldn't be an array, they should be a dictionary
   for i = 1, 20 do
     table.insert(flags,false)
   end
