@@ -12,6 +12,7 @@
 ---------------------------------------------------------  
 local EVENTDATA = require("eventData")
 
+local eventExec = {}
 local textBox = {}
   textBox.choiceStatus = 0
   textBox.choice1 = ""
@@ -40,43 +41,63 @@ function eventLoad(ID) -- called by map.lua when hero overlaps an events x y
   eventStep()
 end
 
+eventExec["textBox"] = function(subEvent)
+  textBox.text = eventLog[subeventID][2]
+  return false
+end
+
+eventExec["flagSet"] = function(subEvent)
+  setFlag(subEvent[2], true) -- defined in map.lua
+  return true
+end
+
+eventExec["flagBranch"] = function(subEvent)
+  if getFlag(subEvent[2]) then
+    eventLog = subEvent[3]
+  else
+    eventLog = subEvent[4]
+  end
+  subeventID = 0
+  return true
+end
+
+eventExec["choiceBranch"] = function(subEvent)
+  if textBox.choiceStatus == 0 then
+    textBox.text = subEvent[2]
+    textBox.choice1 = subEvent[3]
+    textBox.choice2 = subEvent[4]
+    textBox.choiceStatus = 1
+    subeventID = subeventID - 1
+    return false
+  else
+    eventLog = subEvent[textBox.choiceStatus + 4]
+    subeventID = 0
+    textBox.choiceStatus = 0
+    return true
+  end
+end
+
+eventExec["flash"] = function(subEvent)
+  flash = 5
+  return true
+end
+
+eventExec["push"] = function(subEvent)
+  hero.x = hero.x + subEvent[2]
+  hero.y = hero.y + subEvent[3]
+  return true
+end
+
+eventExec["erase"] = function(subEvent)
+  eraseEvent(eventID) -- function in map.lua
+  return true
+end
+
 function eventStep()
-  local step = true
   if subeventID < #eventLog then
     subeventID = subeventID + 1
-    if eventLog[subeventID][1] == "textBox" then
-      textBox.text = eventLog[subeventID][2]
-      step = false
-    elseif eventLog[subeventID][1] == "flagSet" then  
-      setFlag("snakeRepellant", true) -- defined in map.lua
-    elseif eventLog[subeventID][1] == "flagBranch" then          
-      if getFlag(eventLog[subeventID][2]) then
-        eventLog = eventLog[subeventID][3]
-      else
-        eventLog = eventLog[subeventID][4]
-      end
-      subeventID = 0
-    elseif eventLog[subeventID][1] == "choiceBranch" then
-      if textBox.choiceStatus == 0 then
-        textBox.text = eventLog[subeventID][2]
-        textBox.choice1 = eventLog[subeventID][3]
-        textBox.choice2 = eventLog[subeventID][4]
-        textBox.choiceStatus = 1
-        subeventID = subeventID - 1
-        step = false
-      else
-        eventLog = eventLog[subeventID][textBox.choiceStatus + 4]
-        subeventID = 0
-        textBox.choiceStatus = 0
-      end
-    elseif eventLog[subeventID][1] == "flash" then
-      flash = 5 
-    elseif eventLog[subeventID][1] == "push" then
-      hero.x = hero.x + eventLog[subeventID][2]
-      hero.y = hero.y + eventLog[subeventID][3]
-    elseif eventLog[subeventID][1] == "erase" then
-      eraseEvent(eventID) -- function in map.lua
-    end
+    local subEvent = eventLog[subeventID]
+    local step = eventExec[subEvent[1]](subEvent) 
     if step then eventStep() end
   else
     eventLog = nil

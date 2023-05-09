@@ -8,7 +8,11 @@ level = 1
 scene = "map"
 hero = {
   x = 5 ,
-  y = 2
+  y = 2 ,
+  maxHealth = 20 ,
+  health = 15 ,
+  strength = 8 ,
+  exp = 15 
 }
 
 function love.load()

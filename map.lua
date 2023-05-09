@@ -29,12 +29,6 @@ function loadMap()
     table.insert(fogOfWar,row)
   end
   
-  -- initialize flags
-  -- flags shouldn't be an array, they should be a dictionary
-  for i = 1, 20 do
-    table.insert(flags,false)
-  end
-  
   -- initialize event status
   for i,v in ipairs(MAPDATA.eventStatus[level]) do
     eventStatus[v[1]] = v[2]
