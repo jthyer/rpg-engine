@@ -36,6 +36,7 @@ local EVENTDATA = {
             {
             } 
           } ,
+          { "textBox", "OH SHIT IT'S WORKING" } ,
         } ,
         {
         }

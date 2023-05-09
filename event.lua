@@ -20,9 +20,9 @@ local textBox = {}
   textBox.text = ""
 
 local eventID = 0
-local subEventID = { 0 }
-local subEventIDItr = 1
-local eventLog
+local subEventID = 0
+local eventLog = {}
+local eventStack = {}
 local flash = 0
 
 ---------------------------------------------------------
@@ -36,14 +36,15 @@ function eventLoad(ID) -- called by map.lua when hero overlaps an events x y
   scene = "event" 
 
   eventID = ID
-  subEventID = { 0 } 
+  subEventID = 0
   flash = 0
   eventLog = EVENTDATA[level][ID] -- defined in EVENTDATA.lua
+  eventStack = {}
   eventStep()
 end
 
 eventExec["textBox"] = function(subEvent)
-  textBox.text = eventLog[subEventID[subEventIDItr]][2]
+  textBox.text = eventLog[subEventID][2]
   return false
 end
 
@@ -58,7 +59,7 @@ eventExec["flagBranch"] = function(subEvent)
   else
     eventLog = subEvent[4]
   end
-  subEventID[subEventIDItr] = 0
+  subEventID = 0
   return true
 end
 
@@ -68,11 +69,12 @@ eventExec["choiceBranch"] = function(subEvent)
     textBox.choice1 = subEvent[3]
     textBox.choice2 = subEvent[4]
     textBox.choiceStatus = 1
-    subEventID[subEventIDItr] = subEventID[subEventIDItr] - 1
+    subEventID = subEventID - 1
     return false
   else
+    table.insert(eventStack,{subEventID,eventLog})
     eventLog = subEvent[textBox.choiceStatus + 4]
-    subEventID[subEventIDItr] = 0
+    subEventID = 0
     textBox.choiceStatus = 0
     return true
   end
@@ -95,16 +97,21 @@ eventExec["erase"] = function(subEvent)
 end
 
 eventExec["battle"] = function(subEvent)
-  table.insert(eventLog,subEventID[subEventIDItr]+1,initBattleEvent())
+  table.insert(eventLog,subEventID+1,initBattleEvent())
   return true
 end
 
 function eventStep()
-  if subEventID[subEventIDItr] < #eventLog then
-    subEventID[subEventIDItr] = subEventID[subEventIDItr] + 1
-    local subEvent = eventLog[subEventID[subEventIDItr]]
+  if subEventID < #eventLog then
+    subEventID = subEventID + 1
+    local subEvent = eventLog[subEventID]
     local step = eventExec[subEvent[1]](subEvent) 
     if step then eventStep() end
+  elseif #eventStack > 0 then
+    subEventID = eventStack[#eventStack][1]
+    eventLog = eventStack[#eventStack][2]
+    table.remove(eventStack)
+    eventStep()
   else
     eventLog = nil
     scene = "map"
