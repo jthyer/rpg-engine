@@ -1,8 +1,8 @@
+require("util")
 require("map")
 require("event")
 require("battle")
 require("ui") 
-require("util")
 
 -- define globals
 level = 1

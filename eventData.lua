@@ -7,7 +7,7 @@ local EVENTDATA = {
       { "textBox", "HE'S GRIPPING A SMALL POUCH IN HIS HAND." } ,
       { "choiceBranch", "TAKE THE POUCH?", "YES", "NO",
         {
-          { "battle" } ,
+          { "battleInit", "Snake" } ,
           { "textBox", "THERE'S SNAKE REPELLANT IN THE POUCH." } ,
           { "textBox", "THERE'S SNAKE REPELLANT IN THE POUCH. 2" } ,
           { "textBox", "THERE'S SNAKE REPELLANT IN THE POUCH. 3" } ,
@@ -54,6 +54,7 @@ local EVENTDATA = {
           { "textBox", "THIS ROOM IS FULL OF SNAKES. YOU BACK AWAY, SLOWLY." } ,
         }
       } ,
+      { "textBox", "HAHAHA WORKING!" } ,
     } ,
   }
 }  

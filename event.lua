@@ -38,7 +38,7 @@ function eventLoad(ID) -- called by map.lua when hero overlaps an events x y
   eventID = ID
   subEventID = 0
   flash = 0
-  eventLog = EVENTDATA[level][ID] -- defined in EVENTDATA.lua
+  eventLog = deepcopy(EVENTDATA[level][ID]) -- defined in EVENTDATA.lua
   eventStack = {}
   eventStep()
 end
@@ -54,6 +54,7 @@ eventExec["flagSet"] = function(subEvent)
 end
 
 eventExec["flagBranch"] = function(subEvent)
+  table.insert(eventStack,{subEventID,eventLog})
   if getFlag(subEvent[2]) then
     eventLog = subEvent[3]
   else
@@ -96,8 +97,27 @@ eventExec["erase"] = function(subEvent)
   return true
 end
 
-eventExec["battle"] = function(subEvent)
-  table.insert(eventLog,subEventID+1,initBattleEvent())
+eventExec["battleInit"] = function(subEvent)
+  local battleEvent = battleInit(subEvent[2])
+  for i = 1, #battleEvent do
+    table.insert(eventLog,subEventID+i,battleEvent[i])
+  end
+  return true
+end
+
+eventExec["battleUpdate"] = function(subEvent)
+  local battleEvent = battleUpdate()
+  for i = 1, #battleEvent do
+    table.insert(eventLog,subEventID+i,battleEvent[i])
+  end
+  return true
+end
+
+eventExec["battleAttack"] = function(subEvent)
+  local battleEvent = battleAttack()
+  for i = 1, #battleEvent do
+    table.insert(eventLog,subEventID+i,battleEvent[i])
+  end
   return true
 end
 
@@ -152,7 +172,7 @@ function drawChoiceBox(status, choice1, choice2, y_offset)
       c2 = "<" .. choice2 .. ">"
     end
     setColor("black")
-    drawTextBox(c1 .. "\n" .. c2, 25, 35 + y_offset - 60, 60, 50, 2)
+    drawTextBox(c1 .. "\n" .. c2, 25, 35 + y_offset - 60, 70, 50, 2)
   end
 end
 
