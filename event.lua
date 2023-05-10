@@ -121,6 +121,30 @@ eventExec["battleAttack"] = function(subEvent)
   return true
 end
 
+eventExec["battleEnemyAttack"] = function(subEvent)
+  local battleEvent = battleEnemyAttack()
+  for i = 1, #battleEvent do
+    table.insert(eventLog,subEventID+i,battleEvent[i])
+  end
+  return true
+end
+
+eventExec["battleEXP"] = function(subEvent)
+  local battleEvent = battleEXP()
+  for i = 1, #battleEvent do
+    table.insert(eventLog,subEventID+i,battleEvent[i])
+  end
+  return true
+end
+
+eventExec["battleEnd"] = function(subEvent)
+  local battleEvent = battleEnd()
+  for i = 1, #battleEvent do
+    table.insert(eventLog,subEventID+i,battleEvent[i])
+  end
+  return true
+end
+
 function eventStep()
   if subEventID < #eventLog then
     subEventID = subEventID + 1
@@ -171,8 +195,8 @@ function drawChoiceBox(status, choice1, choice2, y_offset)
       c1 = "  " .. choice1 .. " "
       c2 = "<" .. choice2 .. ">"
     end
-    setColor("black")
-    drawTextBox(c1 .. "\n" .. c2, 25, 35 + y_offset - 60, 70, 50, 2)
+    drawTextBox(c1 .. "\n" .. c2, 16, 32 + y_offset - 60, 70, 50, 2)
+    --drawTextBox(c1 .. "\n" .. c2, 25, 35 + y_offset - 60, 70, 50, 2)
   end
 end
 
@@ -191,6 +215,8 @@ function drawEvent()
     flash = flash - 1
   end
 
-  drawTextBox(textBox.text, 25, 35 + y_offset, 250, 75)
+  drawTextBox(textBox.text, 16, 34 + y_offset, 268, 77)
+    --drawTextBox(textBox.text, 25, 35 + y_offset, 250, 75)
+  
   drawChoiceBox(textBox.choiceStatus, textBox.choice1, textBox.choice2, y_offset)
 end

@@ -11,9 +11,9 @@ hero = {
   x = 5 ,
   y = 2 ,
   maxHealth = 20 ,
-  health = 15 ,
+  health = 20 ,
   strength = 8 ,
-  exp = 15 
+  exp = 0 
 }
 
 function love.load()
@@ -25,6 +25,9 @@ function love.load()
   -- set font
   font = love.graphics.newFont("cmd.ttf", 16)
   love.graphics.setFont(font)
+  
+  -- load images
+  spr_snake = love.graphics.newImage("images/snake.png")
   
   loadMap()
 end
@@ -58,11 +61,12 @@ function love.draw()
   end 
  
   -- translate to middle of screen
-  -- always draw map, events and battles take place on top of map
-  love.graphics.push()
-  love.graphics.translate(16,8+1)  
-  drawMap()  
-  love.graphics.pop()
+  if (not getBattleActive()) then
+    love.graphics.push()
+    love.graphics.translate(16,8+1)  
+    drawMap()  
+    love.graphics.pop()
+  end
   
   -- draw UI
   love.graphics.push()

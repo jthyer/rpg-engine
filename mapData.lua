@@ -53,6 +53,7 @@ MAP.eventStatus = {
     { "deadPriest", 1 } ,
     { "fearfulDog", 1 } ,
     { "snakes", 0 } ,
+    { "snakeTrap", 1 } ,
   }
 }
 
@@ -61,6 +62,7 @@ MAP.eventLocTable = {
     { "deadPriest", 2, 5 } ,
     { "fearfulDog", 13, 3 } ,
     { "snakes", 15, 3 } ,
+    { "snakeTrap", 8, 3} ,
   }
 }
 

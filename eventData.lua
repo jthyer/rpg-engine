@@ -56,6 +56,18 @@ local EVENTDATA = {
       } ,
       { "textBox", "HAHAHA WORKING!" } ,
     } ,
+    [ "snakeTrap" ] = {
+      { "textBox", "YOU SEE A LARGE OAK CHEST." } ,
+      { "choiceBranch", "OPEN THE CHEST?", "YES", "NO",
+        {
+          { "textBox", "A SNAKE LUNGES AT YOU FROM INSIDE THE CHEST!" } ,
+          { "battleInit", "Snake" } ,
+          { "erase" } ,
+        } ,
+        {
+        } ,
+      }
+    }
   }
 }  
 
