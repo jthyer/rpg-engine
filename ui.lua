@@ -12,20 +12,6 @@ local METER_OFFSET = 15
 local ITEM_OFFSET = 32
 local MAX_EXP = UI_WIDTH - (STATUS_X*2)
 
--- values before adding "PRINCE"
---local UI_WIDTH = 76
---local LEVELBOX_Y = 130-- 0
---local LEVELNAME_Y = 11
---local LEVELNAME_HEIGHT = 50
---local STATUSBOX_Y = 0--62
---local STATUSBOX_HEIGHT = 118
---local STATUS_X = 5
---local STATUS_Y = STATUSBOX_Y + 10
---local METER_HEIGHT = 12
---local METER_OFFSET = 15
---local ITEM_OFFSET = 34
---local MAX_EXP = UI_WIDTH - (STATUS_X*2)
-
 function drawLevelName()
   drawBorder(0,LEVELBOX_Y,UI_WIDTH,LEVELNAME_HEIGHT)
   love.graphics.printf("RUINED CHURCH",0,LEVELBOX_Y + LEVELNAME_Y,UI_WIDTH,"center")
@@ -47,9 +33,10 @@ function drawStatus()
   setColor("pink")
   love.graphics.rectangle("fill",STATUS_X+1,STATUS_Y+METER_OFFSET+1,hero.health,METER_HEIGHT)
   love.graphics.rectangle("fill",STATUS_X+1,STATUS_Y+METER_OFFSET+ITEM_OFFSET+1,hero.strength,METER_HEIGHT)
-  love.graphics.rectangle("fill",STATUS_X+1,STATUS_Y+METER_OFFSET+ITEM_OFFSET*2+1,hero.exp,METER_HEIGHT)
+  love.graphics.rectangle("fill",STATUS_X+1,STATUS_Y+METER_OFFSET+ITEM_OFFSET*2+1,hero.expDisplay,METER_HEIGHT)
 end
 
+-- should add constants here
 function drawMonster()
   if getBattleActive() then -- function in battle.lua
 

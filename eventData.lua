@@ -62,7 +62,7 @@ local EVENTDATA = {
         {
           { "textBox", "A SNAKE LUNGES AT YOU FROM INSIDE THE CHEST!" } ,
           { "battleInit", "Snake" } ,
-          { "erase" } ,
+          --{ "erase" } ,
         } ,
         {
         } ,

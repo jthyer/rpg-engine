@@ -81,11 +81,38 @@ battleExec["enemyAttack"] = function()
 end
 
 battleExec["EXP"] = function()
-  hero.exp = hero.exp + monster.exp
+  local exp = math.ceil((monster.level / hero.level ) * 20)
+  local message = monster.name .. " DEFEATED! GAINED " ..
+    tostring(exp) .. " EXP!" 
+  
+  for i = 1, exp do
+    hero.exp = hero.exp + 1
+    if hero.exp == 100 then
+      message = message .. "\nPRINCE GROWS STRONGER!"
+      hero.level = hero.level + 1
+      if hero.level % 3 == 0 then
+        hero.maxHealth = hero.maxHealth + 10
+        hero.health = hero.health + 5
+        hero.strength = hero.strength + 5
+        message = message .. "\nSTRENGTH INCREASES! HEALTH INCREASES!"
+      elseif hero.level % 2 == 0 then
+        hero.strength = hero.strength + 5
+        message = message .. "\nSTRENGTH INCREASES!"
+      else
+        hero.maxHealth = hero.maxHealth + 10
+        hero.health = hero.health + 5
+        message = message .. "\nHEALTH INCREASES!"
+      end
+      hero.exp = 0
+    end
+  end
+  
+  hero.expDisplay = math.ceil(hero.exp * 0.66)
+  
   local event = {
-    { "textBox", "SNAKE DEFEATED! GAINED " .. tostring(monster.exp) .. " EXP!" } ,
+    { "textBox", message} ,
     { "battle" , "end" }
-  }
+  } 
   
   return event
 end
@@ -94,6 +121,11 @@ battleExec["end"] = function()
   battleActive = false
   
   return {}
+end
+
+function calcEXP(currentEXP,currentLevel,monsterLevel)
+
+  local levelDiff = current
 end
 
 function calcDamage(attackerStrength, targetStrength)

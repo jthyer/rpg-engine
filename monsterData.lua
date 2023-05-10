@@ -5,8 +5,9 @@
 local monsters = {}
 
 monsters.Snake = {}
+monsters.Snake.name = "SNAKE"
 monsters.Snake.maxHealth = 12
 monsters.Snake.strength = 6
-monsters.Snake.exp = 10
+monsters.Snake.level = 5.63
 
 return monsters
