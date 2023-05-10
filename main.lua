@@ -1,7 +1,7 @@
 require("util")
 require("map")
-require("event")
 require("battle")
+require("event")
 require("ui") 
 
 -- define globals

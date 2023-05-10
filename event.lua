@@ -105,40 +105,8 @@ eventExec["battleInit"] = function(subEvent)
   return true
 end
 
-eventExec["battleUpdate"] = function(subEvent)
-  local battleEvent = battleUpdate()
-  for i = 1, #battleEvent do
-    table.insert(eventLog,subEventID+i,battleEvent[i])
-  end
-  return true
-end
-
-eventExec["battleAttack"] = function(subEvent)
-  local battleEvent = battleAttack()
-  for i = 1, #battleEvent do
-    table.insert(eventLog,subEventID+i,battleEvent[i])
-  end
-  return true
-end
-
-eventExec["battleEnemyAttack"] = function(subEvent)
-  local battleEvent = battleEnemyAttack()
-  for i = 1, #battleEvent do
-    table.insert(eventLog,subEventID+i,battleEvent[i])
-  end
-  return true
-end
-
-eventExec["battleEXP"] = function(subEvent)
-  local battleEvent = battleEXP()
-  for i = 1, #battleEvent do
-    table.insert(eventLog,subEventID+i,battleEvent[i])
-  end
-  return true
-end
-
-eventExec["battleEnd"] = function(subEvent)
-  local battleEvent = battleEnd()
+eventExec["battle"] = function(subEvent)
+  local battleEvent = battleExec[subEvent[2]]()
   for i = 1, #battleEvent do
     table.insert(eventLog,subEventID+i,battleEvent[i])
   end

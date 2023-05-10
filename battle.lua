@@ -1,15 +1,12 @@
----------------------------------------------------------
+-------------------------------------------------------------------------------
 -- BATTLE EVENTS
---   A battle is a kind of recursive event. In a sense, it's just a choice box that calls a new choice box continuously until the battle is over.
---   
---   
---  Make a battle init that defines the monster parameters.
---------------------------------------------------------- 
+--   A battle is a kind of recursive event. In a sense, it's just a choice box 
+--   that calls a new choice box continuously until the battle is over.
+-------------------------------------------------------------------------------
 
 battleExec = {}
 
 local battleActive = false
-
 local MONSTERDATA = require("monsterData")
 local monster = {} 
 
@@ -21,22 +18,22 @@ function battleInit(monsterName)
   
   local event = {
     { "textBox" , "THE ENEMY APPROACHES!" } ,
-    { "battleUpdate" } ,
+    { "battle" , "update" } ,
   }
   
   return event
 end
 
-function battleUpdate()
+battleExec["update"] = function()
   local event = {
     { "choiceBranch", "COMMAND?", "FIGHT", "RUN",
       {
         { "textBox", "PRINCE ATTACKS SNAKE!" } ,
-        { "battleAttack" } ,
+        { "battle" , "attack" } ,
       } ,
       {
         { "textBox", "PRINCE FLEES!" } ,
-        { "battleEnd" }
+        { "battle" , "end" }
       } ,
     } ,
   }  
@@ -44,12 +41,8 @@ function battleUpdate()
   return event
 end
 
-function battleAttack()
-  local damage = hero.strength - math.floor(monster.strength / 2)
-  local variance = math.random(1,5) - 3 
-  damage = damage + variance
-  if damage < 1 then damage = 1 end
-
+battleExec["attack"] = function()
+  local damage = calcDamage(hero.strength, monster.strength)
   monster.health = monster.health - damage
 
   local event = { 
@@ -58,36 +51,17 @@ function battleAttack()
   
   if monster.health > 0 then 
     table.insert(event,{ "textBox", "SNAKE ATTACKS!" } )
-    table.insert(event,{ "battleEnemyAttack" } )
+    table.insert(event,{ "battle" , "enemyAttack" } )
   else
     monster.health = 0
-    table.insert(event, { "battleEXP" } )
+    table.insert(event, { "battle", "EXP" } )
   end
   
   return event
 end
 
-function battleEXP()
-  hero.exp = hero.exp + monster.exp
-  local event = {
-    { "textBox", "SNAKE DEFEATED! GAINED " .. tostring(monster.exp) .. " EXP!" } ,
-    { "battleEnd" }
-  }
-  
-  return event
-end
-
-function battleEnd()
-  battleActive = false
-  
-  return {}
-end
-
-function battleEnemyAttack()
-  local damage = monster.strength - math.floor(hero.strength / 2)
-  local variance = math.random(1,5) - 3 
-  damage = damage + variance
-  if damage < 1 then damage = 1 end
+battleExec["enemyAttack"] = function()
+  local damage = calcDamage(monster.strength, hero.strength)
   hero.health = hero.health - damage
   
   local event = { 
@@ -95,15 +69,40 @@ function battleEnemyAttack()
   }
   
   if hero.health > 0 then 
-    table.insert(event,{ "battleUpdate" } )
+    table.insert(event,{ "battle" , "update" } )
   else
     hero.health = 0
     table.insert(event, { "textBox", "PRINCE DEFEATED!" } )
     table.insert(event, { "textBox", "-GAME OVER-" } )
-    table.insert(event, { "battleEnd" } )
+    table.insert(event, { "battle" , "end" } )
   end
   
   return event
+end
+
+battleExec["EXP"] = function()
+  hero.exp = hero.exp + monster.exp
+  local event = {
+    { "textBox", "SNAKE DEFEATED! GAINED " .. tostring(monster.exp) .. " EXP!" } ,
+    { "battle" , "end" }
+  }
+  
+  return event
+end
+
+battleExec["end"] = function()
+  battleActive = false
+  
+  return {}
+end
+
+function calcDamage(attackerStrength, targetStrength)
+  local damage = attackerStrength - math.floor(targetStrength / 2)
+  local variance = math.random(1,5) - 3 
+  damage = damage + variance
+  if damage < 1 then damage = 1 end
+
+  return damage
 end
 
 function getBattleActive()
