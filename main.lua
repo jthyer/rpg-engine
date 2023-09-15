@@ -1,8 +1,8 @@
-require("util")
-require("map")
-require("battle")
-require("event")
-require("ui") 
+require("src.util")
+require("src.map")
+require("src.battle")
+require("src.event")
+require("src.ui") 
 
 -- define globals
 level = 1
@@ -29,7 +29,7 @@ function love.load()
   love.graphics.setFont(font)
   
   -- load images
-  spr_snake = love.graphics.newImage("images/snake.png")
+  spr_snake = love.graphics.newImage("assets/images/battlers/snake.png")
   
   loadMap()
 end
