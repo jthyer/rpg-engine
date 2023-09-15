@@ -41,7 +41,11 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
   if scene == "map" then
-    moveHero(key)
+    if key == "z" then
+      restHero()
+    else
+      moveHero(key)
+    end
   elseif scene == "event" then
     eventKeyPressed(key)
   end
