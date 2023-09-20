@@ -1,0 +1,34 @@
+{
+  "name": "Lich's Keep",
+  "ogmoVersion": "3.4.0",
+  "levelPaths": ["."],
+  "backgroundColor": "#282c34ff",
+  "gridColor": "#3c4049cc",
+  "anglesRadians": true,
+  "directoryDepth": 5,
+  "layerGridDefaultSize": {"x": 16, "y": 16},
+  "levelDefaultSize": {"x": 320, "y": 240},
+  "levelMinSize": {"x": 128, "y": 128},
+  "levelMaxSize": {"x": 4096, "y": 4096},
+  "levelValues": [],
+  "defaultExportMode": ".json",
+  "compactExport": false,
+  "externalScript": "",
+  "playCommand": "",
+  "entityTags": [],
+  "layers": [
+    {
+      "definition": "tile",
+      "name": "tiles",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "06853326",
+      "exportMode": 0,
+      "arrayMode": 0,
+      "defaultTileset": "rpg_tiles"
+    }
+  ],
+  "entities": [],
+  "tilesets": [
+    {"label": "rpg_tiles", "path": "tileset.png", "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAABACAIAAABdtOgoAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAPaSURBVHhe7dVRclMxDIVhVpYlsR5WwT7YCDMMiyiKj+ycWrKwm8v1TdE3fZB/u+mDhvDltujnot+/vi396J+53d6+/5AfPZBRn/R2MbmAzXIBm738AnBc+LmYXMBm+RW0WS5gs1zAZrmAzXIBm+UCNnv5BeC48HMxuYDN8itos1zAZrmAzZYXkI51X8DXafgdPUzI9zF5nAuInPD+2QXYwuJbK35vb22Jjd4vdcRGazFTmFzlAqIPsVdceIaZwuTKWUD5FaWpstEW5t4igqbKjY29tUUggqZqPoK94sIzzBQmV/0CyvvlP9BorWzkwjPYIhAbrUVceIZRAU3Edi48w6g0Wisp/ldQeaw0FXHhGWYKs7dceIZRYXpR2CLcCPaKC88QF55BjsOvIB6auPAMM4XZWy48w0xh7q0bwV5x4RniwjPI8ZivIDvDTGH2lgvPMFOYe+tGcK8QG61FXHgGOe5cAM8QF54hLjyDLcKNEFwJexsXnkGOw6+gRmsRF57BFoEImiobufAMtghE0FTNR7BXXHiGuPAMcvT/Ex4pn+D8gUZr5caA+x6x0VrYEnPfuxHcK0TQVNnIhWeQ47MLiOX7mDzOBUROeH9fQNooF7BZfgVFTnh/zAJW+8h/+N5fQPmcf9JtYaPb1T5ywffHLGDEvreFjW5X+8j571EarZWUs7+CbGGj25mO2YUHojsKlEZrFUTQVNnIhWeQ486vIJ7BFpjpqzNw4RniwjPEhWeQ47YFtIG5Ucz01Rm48Axx4RniwjPIcc8CQBN5pq/OwIVniAvPEBeeQY7bFqDn90ZXM311Bi48Q1x4hrjwDHLMfwGPwjPEhWcYlUZrJSX/D3gUnsEWgQiaKhttYXK1bQHdDLbAah85/70tTK78BYyUT+vfuxGCK9fne28Lk6sDFhDI9zF5fF9A2igXsFl+BUVOeJ8LiJzwPhcQOeG9s4DyIQ9aC1tiR71f7SMXfN8voHyCFp7BFoEImqoggqbKjWK+c+EZutIdRVf4yDPjzrPojqIrMh+5AD0T27nwDLYIRNBU2ciFZ+hKdxRd4ePqDFx4BjketgA9vGevbGGj2/nOhWeIC8/QlXa0A3RHQARNlZSzFyAQQVPlRjHfufAMceEZutKOdoDu2AR9wwIae2sLzHcuPIMtAhE0VV3E0dLrD31+vwBRXj5oLWwRbgR7xYVnsAXmOxeewRaY71x4hrjwDHJ0FtCU93/5A8KN4F4hgqbKjWKpIzZaC1tgvnPhGbrSHUVXZD5gAYED37tXbgxc8P3LLMD1Cd5HC7DK5+f7oQ+8vy8gbXO7/QG47mTWnPasTwAAAABJRU5ErkJggg==", "tileWidth": 16, "tileHeight": 16, "tileSeparationX": 0, "tileSeparationY": 0, "tileMarginX": 0, "tileMarginY": 0}
+  ]
+}

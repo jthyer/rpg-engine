@@ -1,8 +1,32 @@
 -- MAPDATA should be immutable. These tables are not edited anywhere, only referenced.
 
-local MAP = {}
+local json = require("lib.json")
 
-MAP.levelTable = { 
+local MAP = {}
+MAP.levelTable = {}
+table.insert(MAP.levelTable,{})
+
+local raw = love.filesystem.read("maps/ruinedChurch.json")
+local jsonData = json.decode(raw)
+    
+for i = 1, 30 do
+  local row = {}
+  for i2 = 1, 30 do
+    local cell = jsonData["layers"][1]["data"][i2+((i-1)*30)]
+    if cell == -1 then cell = 0 end
+    table.insert(row,cell)
+  end
+  table.insert(MAP.levelTable[1],row)
+end
+
+for i,v in ipairs (MAP.levelTable[1]) do
+  for i2, v2 in ipairs (v) do
+    print(v2)
+  end
+
+end
+
+--[[MAP.levelTable = { 
   { -- level 1
     { 1,1,1,1,5,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1, 0,0,0,0,0,0,1,5,1,0},
     { 1,1,1,1,5,1,1,1,1,1, 1,1,1,1,6,6,6,6,1,1, 0,0,0,0,0,0,1,5,1,0},
@@ -28,11 +52,11 @@ MAP.levelTable = {
   } ,
   { -- level 2
   }
-}
+}--]]--
 
 MAP.objTable = { 
   { -- level 1
-    { "doorH", 5, 1 } , 
+    --[[{ "doorH", 5, 1 } , 
     { "doorV", 4, 6 } ,
     { "doorV", 6, 6 } ,
     { "doorV", 4, 11 } ,
@@ -40,7 +64,7 @@ MAP.objTable = {
     { "doorV", 14, 6 } ,
     { "doorH", 5, 13 } ,
     { "doorH", 18, 17 } ,
-    { "doorH", 15, 4 }
+    { "doorH", 15, 4 }]]--
   } ,
   { -- level 2
   } 

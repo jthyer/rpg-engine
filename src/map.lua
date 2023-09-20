@@ -19,7 +19,7 @@ local flags = {}
 local eventStatus = {}
 local message = ""
 local randomBattleCheck = false
-local randomBattleCooldown = 0
+local randomBattleCooldown = 10000
 local restCheck = false
 
 function loadMap()
