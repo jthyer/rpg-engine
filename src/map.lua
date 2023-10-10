@@ -102,8 +102,8 @@ function updateMap()
   end
   
   -- update message
-  local code = MAPDATA.levelTable[level][hero.y][hero.x]
-  message = MAPDATA.msgTable[level][code]
+  local code = MAPDATA.levelTable[level][hero.y][hero.x] - 7
+  message = "---" .. MAPDATA.msgTable[level][code] .. "---"
   
   randomBattleCheck = false
 end

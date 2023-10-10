@@ -8,7 +8,7 @@ require("src.ui")
 level = 1
 scene = "map"
 hero = {
-  x = 5 ,
+  x = 11 ,
   y = 2 ,
   level = 1 ,
   maxHealth = 20 ,
