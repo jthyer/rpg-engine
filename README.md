@@ -8,13 +8,11 @@ Functional:
 - Basic events, text boxes, locked doors and keys.
 - Battle system, leveling.
 - Random encounters, resting.
-
-To implement:
-- Enemies can miss, running can fail.
-- Find STR Seed, Health Seed, Bronze/Iron/Silver Swords on map to raise STR.
-- Draw maps and place events in Ogmo. This is the last step, then this is an engine I can really use.
+- Building maps in Ogmo.
 
 Polish steps after making an actual game:
+- Enemies can miss, running can fail.
+- Find STR Seed, Health Seed, Bronze/Iron/Silver Swords on map to raise STR.
 - Make Game Over'ing functional.
 - Transitions between maps.
 - Title screen.
