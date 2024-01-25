@@ -27,6 +27,19 @@ local EVENTDATA = {
     ["restHero"] = RESTEVENT() ,
     ["randomBattle"] = { { "battleInit", "Snake" } } ,
     
+    ["forestBlockR"] = { 
+      { "push", -1, 0 } ,
+      { "textBox", "DENSE FOREST STRETCHES ON FOR MILES." } , 
+    } ,
+    ["forestBlockD"] = { 
+      { "push", 0, 1 } ,
+      { "textBox", "DENSE FOREST STRETCHES ON FOR MILES." } , 
+    } ,
+    ["graveBlock"] = {
+      { "push", -1, 0 } ,
+      { "textBox", "THERE'S NOTHING OF NOTE PAST THE GRAVEYARD." } , 
+    } ,   
+    
     ["deadPriest"] = { 
       { "textBox", "AN UNCONSCIOUS PRIEST LIES ON THE STONE FLOOR, WHEEZING FAINTLY. A MASSIVE BLOODY GASH CARVES ACROSS HIS TORSO." } ,
       { "textBox", "HE'S GRIPPING A SMALL POUCH IN HIS HAND." } ,

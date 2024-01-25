@@ -14,7 +14,7 @@ local MAX_EXP = UI_WIDTH - (STATUS_X*2)
 
 function drawLevelName()
   drawBorder(0,LEVELBOX_Y,UI_WIDTH,LEVELNAME_HEIGHT)
-  love.graphics.printf("RUINED CHURCH",0,LEVELBOX_Y + LEVELNAME_Y,UI_WIDTH,"center")
+  love.graphics.printf("OXRUN VILLAGE",0,LEVELBOX_Y + LEVELNAME_Y,UI_WIDTH,"center")
 end
 
 function drawStatus()

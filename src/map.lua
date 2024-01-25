@@ -150,7 +150,7 @@ function drawMap()
   setColor("white")
   iterate2DTable(MAPDATA.levelTable[level],drawRect)
   setColor("grey")
-  iterate2DTable(fogOfWar,drawRect)
+  --iterate2DTable(fogOfWar,drawRect)
   setColor("yellow")
   drawRect(hero.x,hero.y,1)
 end
